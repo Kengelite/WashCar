@@ -1,0 +1,135 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    let id_admin;
+    $(document).ready(function () {
+        $('.modal_withdraw_money').click(function () {
+            // var addid = $(this).attr("id");
+            $('#popupinsert_withdraw_money').modal('show');
+            // console.log(uid)
+        });
+        $('#insert_withdraw_money').click(function () {
+            // var addid = $(this).attr("id");      
+            let money = $('#name_money').val()
+            // console.log(uid)
+            $.ajax({
+                url: '/data/insert_withdraw',
+                method: 'post',
+                data: { money },
+                success: function (data) {
+                    console.log(data)
+                    if (data.status == "error") {
+                        Swal.fire(
+                            'ยอดเงินไม่เพียงพอ',
+                            '',
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'บันทึกข้อมูลสำเร็จ',
+                            '',
+                            'success'
+                        ).then(() => {
+                            window.location = "/index"
+                        })
+                    }
+                    // });
+
+                }
+            });
+        });
+        var addid;
+        $('.modal_editwithdraw_money').click(function () {
+            addid = $(this).attr("id");
+            $('#popupedit_withdraw_money').modal('show');
+            $.ajax({
+                url: '/data/check_data_money',
+                method: 'post',
+                data: { id: addid },
+                success: function (data) {
+                    console.log(data)
+                    $('#edit_name_money').val(data.data[0].total);
+                }
+            });
+        });
+        $('#edit_withdraw_money').click(function () {
+            // var addid = $(this).attr("id");      
+            let money = $('#edit_name_money').val()
+            // var addid = $(this).attr("id");
+            console.log(addid)
+            Swal.fire({
+                title: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                $.ajax({
+                    url: '/data/edit_data_money',
+                    method: 'post',
+                    data: { id: addid, money },
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == "error") {
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        } else {
+                            $('#popupedit_withdraw_money').modal('hide');
+                            Swal.fire(
+                                'บันทึกข้อมูลสำเร็จ',
+                                '',
+                                'success'
+                            ).then(() => {
+                                window.location = "/transection"
+                            })
+                        }
+                        // });
+
+                    }
+                });
+            });
+        });
+        $('.delete_withdraw_money').click(function () {
+            // var addid = $(this).attr("id");      
+            // let money = $('#edit_name_money').val()
+            var id = $(this).attr("id");
+            console.log(id)
+            Swal.fire({
+                title: 'คุณต้องการยกเลิกข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                $.ajax({
+                    url: '/data/delete_data_money',
+                    method: 'post',
+                    data: { id: id},
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status == "error") {
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        } else {
+                            $('#popupedit_withdraw_money').modal('hide');
+                            Swal.fire(
+                                'บันทึกข้อมูลสำเร็จ',
+                                '',
+                                'success'
+                            ).then(() => {
+                                window.location = "/transection"
+                            })
+                        }
+                        // });
+
+                    }
+                });
+            })
+        });
+    });
+</script>

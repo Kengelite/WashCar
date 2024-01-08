@@ -1,0 +1,143 @@
+<script>
+    $(document).ready(function () {
+
+        $('.choose_money_total').click(function () {
+            // var uid = $(this).attr("id");
+            // console.log(uid)
+            // var uid = $(this).attr("value");
+            var value = $(this).val()
+            console.log(value)
+            if (value == 'month') {
+                $.ajax({
+                    url: '/data/choose_month_data_dashboard',
+                    method: 'post',
+                    // data: { id: uid },
+                    success: function (data_callback) {
+                        // $('#popupdata').modal('show');
+                        data_total_momey = []
+                        data_total_momey = data_callback.data_chart_total_money
+                        data_total_momey.unshift(['วัน', 'ยอดเงินรายรับ ( บาท )'])
+                        if (data_total_momey.length == 1) {
+                            data_total_momey.push(['0', 0])
+                        }
+                        var data = google.visualization.arrayToDataTable(
+                            data_total_momey
+                            // [
+
+                            //   ['HOUR', 'ยอดเงินรายรับ'],
+                            //   ['2004', 1000],
+                            //   ['2005', 1170],
+                            //   ['2006', 660],
+                            //   ['2007', 1030]
+                            // ]
+                        );
+
+                        var options = {
+                            // title: 'ยอดเงินสรุป',
+                            chart: {
+                                title: 'ยอดเงินสรุป',
+                                subtitle: 'เดือน ' + (parseInt(new Date().getMonth()) + 1) + " / " + new Date().getFullYear(),
+                            }
+                            // curveType: 'function',
+                            // legend: { position: 'bottom' }
+                        };
+
+                        var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+                        chart.draw(data, google.charts.Bar.convertOptions(options));
+                        console.log(data_callback)
+                        // });
+
+                    }
+                });
+            } else if (value == 'day') {
+                $.ajax({
+                    url: '/data/choose_day_data_dashboard',
+                    method: 'post',
+                    // data: { id: uid },
+                    success: function (data_callback) {
+                        // $('#popupdata').modal('show');
+                        data_total_momey = []
+                        data_total_momey = data_callback.data_chart_total_money
+                        data_total_momey.unshift(['เวลา', 'ยอดเงินรายรับ ( บาท )'])
+                        if (data_total_momey.length == 1) {
+                            data_total_momey.push(['0', 0])
+                        }
+                        var data = google.visualization.arrayToDataTable(
+                            data_total_momey
+                            // [
+
+                            //   ['HOUR', 'ยอดเงินรายรับ'],
+                            //   ['2004', 1000],
+                            //   ['2005', 1170],
+                            //   ['2006', 660],
+                            //   ['2007', 1030]
+                            // ]
+                        );
+
+                        var options = {
+                            // title: 'ยอดเงินสรุป',
+                            chart: {
+                                title: 'ยอดเงินสรุป',
+                                subtitle: 'วันที่ ' + new Date().getDate() + ' / ' + (parseInt(new Date().getMonth()) + 1) + " / " + new Date().getFullYear(),
+                            }
+                            // curveType: 'function',
+                            // legend: { position: 'bottom' }
+                        };
+
+                        var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+                        chart.draw(data, google.charts.Bar.convertOptions(options));
+                        console.log(data_callback)
+                        // });
+
+                    }
+                });
+            } else if (value == 'year') {
+                $.ajax({
+                    url: '/data/choose_year_data_dashboard',
+                    method: 'post',
+                    // data: { id: uid },
+                    success: function (data_callback) {
+                        // $('#popupdata').modal('show');
+                        data_total_momey = []
+                        data_total_momey = data_callback.data_chart_total_money
+                        data_total_momey.unshift(['เดือน', 'ยอดเงินรายรับ ( บาท )'])
+                        if (data_total_momey.length == 1) {
+                            data_total_momey.push(['0', 0])
+                        }
+                        var data = google.visualization.arrayToDataTable(
+                            data_total_momey
+                            // [
+
+                            //   ['HOUR', 'ยอดเงินรายรับ'],
+                            //   ['2004', 1000],
+                            //   ['2005', 1170],
+                            //   ['2006', 660],
+                            //   ['2007', 1030]
+                            // ]
+                        );
+
+                        var options = {
+                            // title: 'ยอดเงินสรุป',
+                            chart: {
+                                title: 'ยอดเงินสรุป',
+                                subtitle: 'ปี ' + new Date().getFullYear(),
+                            }
+                            // curveType: 'function',
+                            // legend: { position: 'bottom' }
+                        };
+
+                        var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+                        chart.draw(data, google.charts.Bar.convertOptions(options));
+                        console.log(data_callback)
+                        // });
+
+                    }
+                });
+            }
+
+        });
+    })
+</script>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/setting.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="head">
+          <a href="index.html"> <img src="img/logo.png" alt="logo" class="img-logo"></a>
+        </div>
+
+        <div class="row" id="content">
+            <!-- <div class="col-3 list-group" id="box-left">
+                <a href="index.html" id="menu1-1" class="list-group-item">ภาพรวมระบบ</a>
+                <a href="washcarInSystem.html" id="menu2" class="list-group-item ">ตู้ในระบบ</a>
+                <a href="statistics.html" id="menu3" class="list-group-item ">ข้อมูลสถิติ</a>
+                <a href="systenOverview.html" id="menu4" class="list-group-item ">ตั้งค่าข้อมูล</a>
+                <a href="managePromotion.html" id="menu5" class="list-group-item ">จัดการโปรโมชัน</a>
+            </div> -->
+            <div class="col-2" id="box-left">
+            <ul>
+              <li> <img  id="imgAdmin"src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt=""> <span id="superadmin">Super Admin</span></li>
+              <hr class="hr1">
+                <li><a href="index.html">ภาพรวมระบบ</a></li>
+                <li><a href="washcarInSystem.html">ตู้ในระบบ</a></li>
+                <li><a href="statistics.html">ข้อมูลสถิติ</a></li>
+                <li><a href="setting.html">ตั้งค่าข้อมูล</a></li>
+                <li><a href="managePromotion.html">จัดการโปรโมชัน</a></li>
+              </ul>
+            </div>
+              
+
+            <div class="col" id="box-right">
+                <div class="box1-1">
+                    <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">ประเภท</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">ชื่อ - สกุล</th>
+                            <th scope="col">เงินคงเหลือ</th>
+                            <th scope="col">คะแนนสะสม</th>
+                            <th scope="col"><div class="addAdmin"><button><a href="addadmin.html">เพิ่มAdmin</a></button></div></th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% if ( data.length> 0 ) { %>
+                            <% data.forEach ( function ( recordPerson, index ) { %>
+                                <tr>
+                                    <td>
+                                        <%= recordPerson.name; %>
+                                    </td>
+                                    <td>
+                                        <%= recordPerson.username; %>
+                                    </td>
+                                </tr>
+                                <% } ); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="100%">- ไม่มีข้อมูล -</td>
+                                        </tr>
+                                        <% } %>
+                            <!-- <td id="deleteedit">
+                              <div class="delete"><button class ="btn btn-danger">ลบ</button></div>
+                              <div class="edit"><button class ="btn btn-warning">แก้ไข</button></div>
+                            </td> -->
+                          <tr>
+                            <td scope="row">ผู้ประกอบการ</td>
+                            <td>Jacob@poop.com</td>
+                            <td>Jacob rongtao</td>
+                            <td>123456</td>
+                            <td>10</td>
+                            <td id="deleteedit">
+                              <div class="delete"><button class ="btn btn-danger">ลบ</button></div>
+                              <div class="edit"><button class ="btn btn-warning">แก้ไข</button></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td scope="row">ลูกค้า</td>
+                            <td>Larry@hotmail.com</td>
+                            <td>larry leela</td>
+                            <td>000000</td>
+                            <td>300 </td>
+                            <td id="deleteedit">
+                              <div class="delete"><button class ="btn btn-danger">ลบ</button></div>
+                              <div class="edit"><button class ="btn btn-warning">แก้ไข</button></div>
+                            </td>                            
+                          </tr>
+                          
+
+                        </tbody>
+                       
+                      </table>
+                      
+                </div>
+                
+
+                
+                </div>
+
+
+               
+
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

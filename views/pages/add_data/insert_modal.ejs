@@ -1,0 +1,47 @@
+<!-- Modal -->
+<div class="modal fade" id="popupinsert" tabindex="-1" aria-labelledby="headname" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="title">เพิ่มบัญชีผู้ประกอบการ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <form action="/submit" method="post" id="insert-form">
+                        <tr>
+                            <td><label for="">ชื่อ:</label></td>
+                            <td><input type="text" id="name" name="name" class="form-control" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="username">อีเมล:</label></td>
+                            <td><input type="email" id="email" name="username" class="form-control" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="password">รหัสผ่าน:</label></td>
+                            <td><input type="password" id="password" name="password" class="form-control" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="branch">สาขา:</label></td>
+                            <td><input id="branch" name="branch" class="form-control" required></input></td>
+                        </tr>
+                        <tr>
+                            <td><label for="tel">โทรศัพท์:</label></td>
+                            <td><input type="tel" id="tel" name="password" class="form-control" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="img">เพิ่มรูป:</label></td>
+                            <td><input type="file" id="img" name="img" class="form-control" required></td>
+                        </tr>
+                        
+                </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="add_admin_save">เพิ่มบัญชีผู้ใช้</button>
+                <button type="button" class="btn btn-danger" id="close_admin_save">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>

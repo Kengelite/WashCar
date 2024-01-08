@@ -1,0 +1,29 @@
+<div class="col-2 px-0" id="box-left">
+    <ul>
+      <li class="CarWash"><a href="/index">CarWash</a></li>
+      <li> <img id="imgAdmin" src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt=""> <span
+          id="superadmin">
+          <%= admin_name %>
+        </span></li>
+      <hr class="hr1">
+      <li><a href="/index">ภาพรวมระบบ</a></li>
+      <% if ( branch!=0) { %>
+        <li><a style="cursor: pointer;" class="modal_withdraw_money">ถอนเงิน</a></li>
+        <% } %>
+          <% if ( branch!=0) { %>
+            <li><a href="/transection">ธุรกรรม</a></li>
+            <% } %>
+              <li class="active"><a href="/washcarinsystem">ตู้ในระบบ</a></li>
+
+              <% if ( branch==0) { %>
+                <li><a href="/show_admin">แสดงบัญชีผู้ประกอบการ</a></li>
+                <% } %>
+                  <li><a href="/show_cus">แสดงบัญชีลูกค้า</a></li>
+                  <% if ( branch==0) { %>
+                    <li><a href="/show_branch">จัดการข้อมูลสาขา</a></li>
+                    <% } %>
+                      <li><a href="/managepromotion">จัดการโปรโมชัน</a></li>
+                      <li><a href="/logout">ออกจากระบบ</a></li>
+    </ul>
+  </div>
+  

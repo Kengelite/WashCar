@@ -1,0 +1,226 @@
+<script>
+    $(document).ready(function () {
+        // var mm = $(this).attr("money_show");
+        // var counterElement = document.getElementById("money_show");
+        // counterElement.innerHTML = Number(mm).toLocaleString();
+        $('.modal_data').click(function () {
+            var uid = $(this).attr("id");
+            // console.log(uid)
+            $.ajax({
+                url: '/data/viewcustomer',
+                method: 'post',
+                data: { id: uid },
+                success: function (data) {
+                    $('#popupdata').modal('show');
+                    $('#headname_customer').html("ข้อมูล " + data.data[0].fname + ' ' + data.data[0].lname);
+                    // $('.id').html(data.data[0].id_cus);
+                    $('.email').html(data.data[0].username);
+                    $('.name').html(data.data[0].fname + '  ' + data.data[0].lname);
+                    $('.money').html(Number(data.data[0].money).toLocaleString() + ' ฿');
+                    $('.point').html(Number(data.data[0].balance_point).toLocaleString());
+                    $('.tel ').html(data.data[0].tel);
+                    console.log(data.data[0].total_use)
+                    if (data.data[0].total_use == null) {
+                        $('.money_use ').html(0);
+                    } else {
+                        $('.money_use ').html(data.data[0].total_use);
+                    }
+
+                    console.log(data.data[0])
+                    // });
+
+                }
+            });
+        });
+        let fullname = '';
+        $('.modal_editdata').click(function () {
+            var uid = $(this).attr("id");
+            //console.log(uid)
+            $.ajax({
+                url: '/data/viewcustomer',
+                method: 'post',
+                data: { id: uid },
+                success: function (data) {
+                    $('#popup_editdata').modal('show');
+                    $('.headname_customer').html("ข้อมูล " + data.data[0].fname + ' ' + data.data[0].lname);
+                    // $('.id').html(data.data[0].id_cus);
+                    $('.email_edit').val(data.data[0].username);
+                    $('.fname_edit').val(data.data[0].fname);
+                    $('.lname_edit').val(data.data[0].lname);
+                    $('.balance_edit').val(data.data[0].money);
+                    $('.point_edit').val(data.data[0].balance_point);
+                    $('.tel_edit').val(data.data[0].tel);
+                    console.log(data.data[0])
+
+                    // });
+
+                }
+            });
+        });
+        $('.confirm').click(function () {
+            let fname = $('.fname_edit').val();
+            let lname = $('.lname_edit').val();
+            let money = $('.balance_edit').val();
+            let point = $('.point_edit').val();
+            let tel = $('.tel_edit').val();
+            let email = $('.email_edit').val();
+            if (email != '' && lname != '' && money != '' && point != '' && tel != '' && fname != '') {
+                // console.log(uid)
+                Swal.fire({
+                    title: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+                    // icon: 'warning',
+                    showDenyButton: true,
+                    confirmButtonText: 'ยืนยัน',
+                    denyButtonText: `ยกเลิก`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        console.log($('.email_edit').val())
+                        $.ajax({
+                            url: '/data/edit_datacustomer',
+                            method: 'post',
+                            data: { username: email, fname: fname, lname: lname, money: money, point: point, tel: tel, },
+                            success: function (data) {
+                                if (data.status == 'success') {
+                                    Swal.fire(
+                                        'บันทึกข้อมูลสำเร็จ',
+                                        '',
+                                        'success'
+                                    ).then(() => {
+                                        window.location = "/show_cus"
+                                    })
+                                } else {
+                                    Swal.fire(
+                                        'บันทึกข้อมูลผิดพลาด',
+                                        '',
+                                        'error'
+                                    )
+                                }
+
+                            }, error: function (error) {
+                                Swal.fire(
+                                    'บันทึกข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+                        });
+
+                    }
+                })
+            } else {
+                Swal.fire({
+                    title: 'ข้อมูลไม่ถูกต้อง',
+                    text: "กรุณาตรวจสอบข้อมูล..",
+                    icon: 'warning',
+                })
+            }
+        });
+        $('.modal_delete').click(function () {
+            var uid = $(this).attr("id");
+            // console.log(uid)
+            Swal.fire({
+                title: 'คุณต้องการลบข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/delete_datacustomer',
+                        method: 'post',
+                        data: { username: uid },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'ลบข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_cus"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ลบข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ลบข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
+        // เพิ่มผู้ใช้
+        $('#add_cus').click(function () {
+            $('#popupinsert_cus').modal('show');
+            // var uid = $(this).attr("id");
+            // console.log(uid)
+            $('#add_cus_save').click(function () {
+                let name = $('#name_cus').val()
+                let email = $('#email_cus').val()
+                let password = $('#password_cus').val()
+                let tel = $('#tel_cus').val()
+                if (name != '' && email != '' && password != '' && tel != '') {
+                    let data_cus = { name: name, email: email, password: password, tel: tel }
+                    console.log(data_cus)
+                    $.ajax({
+                        url: '/data/insert_cus',
+                        method: 'post',
+                        data: { name: name, email: email, password: password, tel: tel },
+                        success: function () {
+                            // });
+                            Swal.fire(
+                                'บันทึกข้อมูลสำเร็จ',
+                                '',
+                                'success'
+                            ).then(() => {
+                                window.location = "/show_cus"
+                            })
+                        },
+                        error: function (error) {
+                            Swal.fire(
+                                'บันทึกข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+
+                    });
+                } else {
+                    Swal.fire(
+                        'บันทึกข้อมูลไม่ครบถ้วน',
+                        '',
+                        'error'
+                    )
+                }
+            });
+            // var uid = $(this).attr("id");
+            // console.log(uid)
+            $('#close_cus_save').click(function () {
+                $('#popupinsert_cus').modal('hide');
+                $('#name_cus').val("")
+                $('#email_cus').val("")
+                $('#password_cus').val("")
+                $('#tel_cus').val("")
+            });
+
+        });
+
+
+
+
+
+
+
+    });
+
+</script>

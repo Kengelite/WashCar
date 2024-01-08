@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="/css/dashbord.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkJ0Yu-5gyaZMSA04wfGW2xfNBy0KE0To&callback=initMap" async defer></script>
+    
+    <title>ข้อมูลสาขา</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" id="content">
+            <div class="col-2 px-0" id="box-left">
+                <ul>
+                    <li class="CarWash"><a href="/index">CarWash</a></li>
+                    <li> <img id="imgAdmin" src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt=""> <span
+                            id="superadmin">
+                            <%= admin_name %>
+                        </span></li>
+                    <hr class="hr1">
+                    <li><a href="/index">ภาพรวมระบบ</a></li>
+                    <li><a href="/washcarinsystem">ตู้ในระบบ</a></li>
+
+                    <% if ( branch==0) { %>
+                        <li><a href="/show_admin">แสดงบัญชีผู้ประกอบการ</a></li>
+                        <% } %>
+                            <li><a href="/show_cus">แสดงบัญชีลูกค้า</a></li>
+                            <% if ( branch==0) { %>
+                                <li class="active"><a href="/show_branch">จัดการข้อมูลสาขา</a></li>
+                                <% } %>
+                                    <li><a href="/managepromotion">จัดการโปรโมชัน</a></li>
+                                    <li><a href="/logout">ออกจากระบบ</a></li>
+                </ul>
+            </div>
+
+
+
+            <div class="col-10 ">
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h5 class="card-title">จำนวนสาขา</h5>
+                                <div class="card-text cardtxt">
+                                    <%= result_count_branch[0].count_branch %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h5 class="card-title">จำนวนเงินของสาขา</h5>
+                                <div class="card-text cardtxt">
+                                    <%= result_price[0].total_price - (result_sum_withdraw[0].sum_withdraw==null ? 0:
+                                        result_sum_withdraw[0].sum_withdraw )%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h5 class="card-title">จำนวนจังหวัด</h5>
+                                <div class="card-text cardtxt">
+                                    <%= result_count_city[0].count_city==null ? 0: result_count_city[0].count_city %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 ml-5">
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <!-- <div class="card-title">
+                          <h2>โปรโมชัน</h2>
+                        </div> -->
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ลำดับ</th>
+                                            <th scope="col">สาขา</th>
+                                            <th scope="col">จังหวัด</th>
+                                            <% if ( branch==0) { %>
+                                                <th scope="col"></th>
+                                                <% } %>
+                                                    <% if ( branch==0) { %>
+                                                        <th scope="col"></th>
+                                                        <% } %>
+
+                                                            <% if ( branch==0) { %>
+                                                                <div class="d-flex flex-row-reverse">
+                                                                    <button class="btn btn-success "
+                                                                        id="add_branch">เพิ่มสาขา</button>
+                                                                </div>
+                                                                <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if ( result.length> 0 ) { %>
+                                            <% result.forEach ( function ( recordPerson, index ) { %>
+                                                <tr>
+                                                    <td>
+                                                        <div style="margin-top: 3%;">
+                                                            <%= index+1; %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-top: 3%;">
+                                                            <%= recordPerson.name_branch; %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-top: 3.25%;">
+                                                            <%= recordPerson.name_city; %>
+                                                        </div>
+                                                    </td>
+
+
+                                                    <% if ( branch==0) { %>
+                                                        <td>
+
+                                                            <button type="button" class="btn btn-warning modal_editdata"
+                                                                id="<%= recordPerson.id_branch ; %>">
+                                                                แก้ไข
+                                                            </button>
+                                                        </td>
+                                                        <% } %>
+                                                            <% if ( branch==0) { %>
+                                                                <td>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger modal_delete"
+                                                                        id="<%= recordPerson.id_branch ; %>">
+                                                                        ลบ
+                                                                    </button>
+                                                                </td>
+                                                                <% } %>
+
+                                                </tr>
+                                                <% } ); %>
+                                                    <% } else { %>
+                                                        <tr>
+                                                            <td colspan="100%">- ไม่มีข้อมูล -</td>
+                                                        </tr>
+                                                        <% } %>
+                                    </tbody>
+
+                                </table>
+                                <div style="float: right;">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 ml-5">
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <!-- <div class="card-title">
+                          <h2>โปรโมชัน</h2>
+                        </div> -->
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ลำดับ</th>
+                                            <th scope="col">จังหวัด</th>
+                                            <% if ( branch==0) { %>
+                                                <th scope="col"></th>
+                                                <% } %>
+                                                    <% if ( branch==0) { %>
+                                                        <th scope="col"></th>
+                                                        <% } %>
+                                                            
+                                                                    <% if ( branch==0) { %>
+                                                                        <div class="d-flex flex-row-reverse">
+                                                                            <button class="btn btn-success "
+                                                                                id="add_city">เพิ่มจังหวัด</button>
+                                                                        </div>
+                                                                        <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if ( result_city.length> 0 ) { %>
+                                            <% result_city.forEach ( function ( recordPerson, index ) { %>
+                                                <tr>
+                                                    <td>
+                                                        <div style="margin-top: 3%;">
+                                                            <%= index+1; %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-top: 3%;">
+                                                            <%= recordPerson.name_city; %>
+                                                        </div>
+                                                    </td>
+
+                                                    
+                                                    <% if ( branch==0) { %>
+                                                        <td>
+
+                                                            <button type="button" class="btn btn-warning modal_update_city"
+                                                                id="<%= recordPerson.id_city ; %>">
+                                                                แก้ไข
+                                                            </button>
+                                                        </td>
+                                                        <% } %>
+                                                            <% if ( branch==0) { %>
+                                                                <td>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger modal_delete_city"
+                                                                        id="<%= recordPerson.id_city ; %>">
+                                                                        ลบ
+                                                                    </button>
+                                                                </td>
+                                                                <% } %>
+
+                                                </tr>
+                                                <% } ); %>
+                                                    <% } else { %>
+                                                        <tr>
+                                                            <td colspan="100%">- ไม่มีข้อมูล -</td>
+                                                        </tr>
+                                                        <% } %>
+                                    </tbody>
+
+                                </table>
+                                <div style="float: right;">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <%- include ('add_data/insert_branch'); -%>
+            <%- include ('edit_data/edit_branch'); -%>
+                <%- include ('js/branch'); -%>
+                
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>

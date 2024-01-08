@@ -1,0 +1,70 @@
+body{
+    background-color: #03a9f4;
+}
+
+
+
+/* ----- center ------ */
+.cardtxt{
+  font-family: 'Sniglet', cursive;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: center;
+}
+.card-title{
+    font-size: 1.25em;
+}
+.card-menu{
+    display: flex;
+    padding-top: 0.5em;
+}
+.card-menu span{
+    padding-top: 0.35em;
+    padding-right: 0.5em;
+}
+
+.box_payment_money{
+    height: 25em;
+    border-radius: 20px;
+}
+.box1-3{
+    border-radius: 20rem;
+    
+}
+.box_rigt{
+ width: 100%;
+}
+
+
+/* ------ right ----- */
+.box{
+    border-radius: 10px;
+    width: 100%;
+    background-color: rgb(208, 10, 4);
+    margin-top: 5%;
+    padding: 10%;
+    color: black;
+}
+.box:hover{
+    color: white;
+}
+
+.box_problem{
+    background-color: rgb(255, 195, 138);
+}
+.box_problem:hover{
+    background-color: rgb(239, 160, 85);
+}
+.box_active{
+    background-color: rgb(166, 255, 166);
+}
+.box_active:hover{
+    background-color: rgb(79, 245, 79);
+}
+.box_damaged{
+    background-color: rgb(245, 59, 59);
+}
+.box_damaged:hover{
+    background-color: rgb(244, 22, 22);
+}
+

@@ -1,0 +1,453 @@
+<script>
+    $(document).ready(function () {
+
+        // สำหรับเปิด/ปิดการแสดง password
+        $(document.body).on("click", "[class*='fa-eye']", function () {
+            $(this).toggleClass("fa-eye-slash fa-eye");
+            let ele = $(this).closest(".input-group-append").siblings(".pass-swap");
+            let swap_attr = (ele.attr("type") == "password") ? "text" : "password";
+            ele.attr("type", swap_attr);
+        });
+
+        // โชว์ข้อมูลแอดมิน
+        $('.modal_data_admin').click(function () {
+            var addid = $(this).attr("id");
+            // console.log(uid)
+            $.ajax({
+                url: '/data/viewadmin',
+                method: 'post',
+                data: { id: addid },
+                success: function (data) {
+                    console.log(data)
+                    $('#popupdata_admin').modal('show');
+                    $('#headname_admin').html("ข้อมูล " + data.data[0].username);
+                    // $('.id').html(data.data[0].idadmin);
+                    $('.name').html(data.data[0].admin_name);
+                    $('.email').html(data.data[0].username);
+                    $('.branch').html(data.data[0].name_branch);
+                    $('.city').html(data.data[0].name_city);
+                    $('.tel').html(data.data[0].admin_tel);
+                    console.log(data.data[0])
+                    // });
+
+                }
+            });
+        });
+        let select_branch = '';
+        var arr_branch;
+        let arr_city;
+        let id_admin;
+        let branch_edit;
+        let city_edit;
+        $('.modal_editdata').click(function () {
+
+            var uid = $(this).attr("id");
+            id_admin = uid;
+            //console.log(uid)
+            $.ajax({
+                url: '/data/viewadmin',
+                method: 'post',
+                data: { id: uid },
+                success: function (data) {
+                    $('#popup_editadmindata').modal('show');
+                    $('.headname_customer').html("ข้อมูล " + data.data[0].fname + ' ' + data.data[0].lname);
+                    // $('.id').html(data.data[0].id_cus);
+                    $('.email_edit').val(data.data[0].username);
+                    $('.name_edit').val(data.data[0].admin_name);
+                    $('.branch_edit').val(data.data[0].name_branch);
+                    $('.city_edit').val(data.data[0].name_city);
+                    $('.tel_edit').val(data.data[0].admin_tel);
+                    $('.pass_edit').val(data.data[0].password);
+                    branch_edit = data.data[0].id_branch
+                    city_edit = data.data[0].id_city
+                    arr_branch = data.all_branch;
+                    data.all_branch.forEach((item, index) => {
+                        var input = document.createElement("option");
+                        input.setAttribute("value", item.name_branch);
+                        input.setAttribute("data-value", item.id_branch);
+                        document.getElementById("branchs").appendChild(input);
+
+                    })
+                    arr_city = data.city_branch;
+                    data.city_branch.forEach((item, index) => {
+                        var input_city = document.createElement("option");
+                        input_city.setAttribute("value", item.name_city);
+                        input_city.setAttribute("data-value", item.id_city);
+                        document.getElementById("citys").appendChild(input_city);
+
+
+                    })
+                    // });
+
+                }
+            });
+        });
+        $('.modal_editdata_withdraw').click(function () {
+
+            var uid = $(this).attr("id");
+            id_admin = uid;
+            //console.log(uid)
+            $.ajax({
+                url: '/data/viewadmin_withdraw',
+                method: 'post',
+                data: { id: uid },
+                success: function (data) {
+                    $('#popup_editadmindata_withdraw').modal('show');
+                    $('.headname_customer').html("ข้อมูล " + data.data[0].username);
+                    // $('.id').html(data.data[0].id_cus);
+                    console.log(data)
+                    $('.email_edit').val(data.data[0].username);
+                    $('.money_edit').val(data.data[0].total);
+                    $('.status_edit').val(data.data[0].status);
+                    $('.withdraw_confirm').attr('id', data.data[0].id);
+                    // });
+
+                }
+            });
+        });
+
+        $('.branch_edit').on('input', function () {
+            const selectedOption = $('datalist#branchs option[value="' + $(this).val() + '"]');
+            const selectedValue = selectedOption.data('value');
+            console.log(`branch Selected value: ${selectedValue}`);
+            branch_edit = selectedValue;
+        });
+
+        $('.city_edit').on('input', function () {
+            const selectedOption = $('datalist#citys option[value="' + $(this).val() + '"]');
+            const selectedValue = selectedOption.data('value');
+            console.log(`city Selected value: ${selectedValue}`);
+            city_edit = selectedValue;
+        });
+        $('.confirm').click(function () {
+            console.log("ssssv : " + arr_branch[0].name_branch)
+            console.log("uid : " + id_admin)
+            let email = $('.email_edit').val();
+            let name = $('.name_edit').val();
+            let tel = $('.tel_edit').val();
+            let pass = $('.pass_edit').val();
+            let pass_two = $('.pass_two_edit').val();
+            // console.log(uid)
+            if (email != '' && name != '' && tel != '' && pass != '' && pass_two != '' && branch_edit != undefined && city_edit != undefined) {
+
+                if (pass == pass_two) {
+                    if (branch_edit == 0) {
+                        if (id_admin == 1) {
+                            Swal.fire({
+                                title: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+                                // icon: 'warning',
+                                showDenyButton: true,
+                                confirmButtonText: 'ยืนยัน',
+                                denyButtonText: `ยกเลิก`,
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $.ajax({
+                                        url: '/data/edit_dataadmin',
+                                        method: 'post',
+                                        data: { id: id_admin, username: email, admin_name: name, password: pass, branch: branch_edit, city: city_edit, tel: tel },
+                                        success: function (data) {
+                                            if (data.status == 'success') {
+                                                Swal.fire(
+                                                    'บันทึกข้อมูลสำเร็จ',
+                                                    '',
+                                                    'success'
+                                                ).then(() => {
+                                                    window.location = "/show_admin"
+                                                })
+                                            } else {
+                                                Swal.fire(
+                                                    'บันทึกข้อมูลผิดพลาด',
+                                                    '',
+                                                    'error'
+                                                )
+                                            }
+
+                                        }, error: function (error) {
+                                            Swal.fire(
+                                                'บันทึกข้อมูลผิดพลาด',
+                                                '',
+                                                'error'
+                                            )
+                                        }
+                                    });
+
+                                }
+                            })
+                        } else {
+                            Swal.fire({
+                                title: 'ข้อมูลไม่ถูกต้อง',
+                                text: "ไม่สามารถแก้ไขสาขาได้เนื่องจากเป็นสาขาหลัก",
+                                icon: 'warning',
+                            })
+                        }
+                    } else {
+                        Swal.fire({
+                            title: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+                            // icon: 'warning',
+                            showDenyButton: true,
+                            confirmButtonText: 'ยืนยัน',
+                            denyButtonText: `ยกเลิก`,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '/data/edit_dataadmin',
+                                    method: 'post',
+                                    data: { id: id_admin, username: email, admin_name: name, password: pass, branch: branch_edit, city: city_edit, tel: tel },
+                                    success: function (data) {
+                                        if (data.status == 'success') {
+                                            Swal.fire(
+                                                'บันทึกข้อมูลสำเร็จ',
+                                                '',
+                                                'success'
+                                            ).then(() => {
+                                                window.location = "/show_admin"
+                                            })
+                                        } else {
+                                            Swal.fire(
+                                                `${data.message}`,
+                                                '',
+                                                'error'
+                                            )
+                                        }
+
+                                    }, error: function (error) {
+                                        Swal.fire(
+                                            'บันทึกข้อมูลผิดพลาด',
+                                            '',
+                                            'error'
+                                        )
+                                    }
+                                });
+
+                            }
+                        })
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'รหัสผ่านไม่ตรงกัน',
+                        text: "กรุณาตรวจสอบข้อมูล..",
+                        icon: 'warning',
+                    })
+                }
+
+            } else {
+                if (branch_edit == undefined) {
+                    Swal.fire({
+                        title: 'ข้อมูลสาขาไม่ถูกต้อง',
+                        text: "กรุณาตรวจสอบข้อมูลสาขา..",
+                        icon: 'warning',
+                    })
+                } else if (city_edit == undefined) {
+                    Swal.fire({
+                        title: 'ข้อมูลจังหวัดไม่ถูกต้อง',
+                        text: "กรุณาตรวจสอบข้อมูลจังหวัด..",
+                        icon: 'warning',
+                    })
+                } else {
+                    Swal.fire({
+                        title: 'ข้อมูลไม่ถูกต้อง',
+                        text: "กรุณาตรวจสอบข้อมูล..",
+                        icon: 'warning',
+                    })
+                }
+            }
+        });
+        $('.modal_delete').click(function () {
+            // console.log(uid)
+            var uid = $(this).attr("id");
+            Swal.fire({
+                title: 'คุณต้องการลบข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/delete_data_admin',
+                        method: 'post',
+                        data: { id: uid },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'ลบข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_admin"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ลบข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ลบข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
+        $('.withdraw_confirm').click(function () {
+            var uid = $(this).attr("id");
+            console.log(uid)
+            let email = $('.email_edit').val();
+            let money = $('.money_edit').val();
+            let status = $('.status_edit').val();
+            Swal.fire({
+                title: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/edit_dataadmin_withdraw',
+                        method: 'post',
+                        data: { uid: uid, money: money,status: status  },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'บันทึกข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_admin"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'บันทึกข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'บันทึกข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+
+                }
+            })
+
+        });
+
+        $('.modal_delete_withdraw').click(function () {
+            // console.log(uid)
+            var uid = $(this).attr("id");
+            Swal.fire({
+                title: 'คุณต้องการลบข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/delete_data_admin_withdraw',
+                        method: 'post',
+                        data: { id: uid },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'ลบข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_admin"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ลบข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ลบข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
+        // เพิ่มแอดมิน
+        $('#add_admin').click(function () {
+            $('#popupinsert').modal('show');
+            // var uid = $(this).attr("id");
+            // console.log(uid)
+            $('#add_admin_save').click(function () {
+                let name = $('#name').val()
+                let email = $('#email').val()
+                let password = $('#password').val()
+                let branch = $('#branch').val()
+                let tel = $('#tel').val()
+                if (name != '' && email != '' && password != '' && branch != '' && tel != '') {
+                    let data_t = { name: name, email: email, password: password, branch: branch, tel: tel }
+                    console.log(data_t)
+                    $.ajax({
+                        url: '/data/insert_admin',
+                        method: 'post',
+                        data: { name: name, email: email, password: password, branch: branch, tel: tel },
+                        success: function () {
+                            // });
+                            Swal.fire(
+                                'บันทึกข้อมูลสำเร็จ',
+                                '',
+                                'success'
+                            ).then(() => {
+                                window.location = "/show_admin"
+                            })
+                        },
+                        error: function (error) {
+                            Swal.fire(
+                                'บันทึกข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+
+                    });
+                } else {
+                    Swal.fire(
+                        'บันทึกข้อมูลไม่ครบถ้วน',
+                        '',
+                        'error'
+                    )
+                }
+            });
+            // var uid = $(this).attr("id");
+            // console.log(uid)
+            $('#close_admin_save').click(function () {
+                $('#popupinsert').modal('hide');
+                $('#name').val("")
+                $('#email').val("")
+                $('#password').val("")
+                $('#branch').val("")
+                $('#tel').val("")
+            });
+
+
+        });
+        $('.Close').click(function () {
+            $('.pass_two_edit').val("")
+        });
+    });
+
+</script>

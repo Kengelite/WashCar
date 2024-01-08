@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="/css/dashbord.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row" id="content">
+            <div class="col-2 px-0" id="box-left">
+                <ul>
+                    <li class="CarWash"><a href="/index">CarWash</a></li>
+                    <li> <img id="imgAdmin" src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt=""> <span
+                            id="superadmin">
+                            <%= admin_name %>
+                        </span></li>
+                    <hr class="hr1">
+                    <li><a href="/index">ภาพรวมระบบ</a></li>
+                    <% if ( branch!=0) { %>
+                        <li><a style="cursor: pointer;" class="modal_withdraw_money">ถอนเงิน</a></li>
+                        <% } %>
+                        <% if ( branch!=0) { %>
+                            <li><a href="/transection">ธุรกรรม</a></li>
+                            <% } %>
+                                    <li><a href="/washcarinsystem">ตู้ในระบบ</a></li>
+
+                                    <% if ( branch==0) { %>
+                                        <li><a href="/show_admin">แสดงบัญชีผู้ประกอบการ</a></li>
+                                        <% } %>
+                                            <li class="active"><a href="/show_cus">แสดงบัญชีลูกค้า</a></li>
+                                            <% if ( branch==0) { %>
+                                                <li><a href="/show_branch">จัดการข้อมูลสาขา</a></li>
+                                                <% } %>
+                                                    <li><a href="/managepromotion">จัดการโปรโมชัน</a></li>
+                                                    <li><a href="/logout">ออกจากระบบ</a></li>
+                </ul>
+            </div>
+
+
+
+            <div class="col-10 ">
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h5 class="card-title">จำนวนลูกค้า</h5>
+                                <div class="card-text cardtxt">
+                                    <%= total_cus[0].total_customer %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h5 class="card-title">จำนวนการใช้งานตลอดทั้งเดือน</h5>
+                                <div class="card-text cardtxt">
+                                    <%= result_count_use[0].total==null ? 0 : result_count_use[0].total %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <h5 class="card-title">ยอดเงินเฉลี่ยต่อเดือน</h5>
+                                <div class="card-text cardtxt">
+                                    <%= result_avg_money[0].avg_total==null ? 0 :
+                                        parseFloat(result_avg_money[0].avg_total).toFixed(2) %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3 ml-5">
+                    <div class="col">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body">
+                                <!-- <div class="card-title">
+                          <h2>โปรโมชัน</h2>
+                        </div> -->
+                                <table class="table table-striped">
+                                    <thead>
+                                        <thead>
+                                            <th scope="col">E-mail</th>
+                                            <th scope="col">ชื่อ - สกุล</th>
+                                            <th scope="col">เงินคงเหลือ</th>
+                                            <th scope="col">คะแนนสะสม</th>
+                                            <% if ( branch==0) { %>
+                                                <th scope="col"></th>
+                                                <% } %>
+                                                    <% if ( branch==0) { %>
+                                                        <th scope="col"></th>
+                                                        <% } %>
+                                                            <% if ( branch==0) { %>
+                                                                <th scope="col"></th>
+                                                                <% } %>
+                                                                    <% if ( branch==0) { %>
+                                                                        <div class="d-flex flex-row-reverse">
+                                                                            <button class="btn btn-success "
+                                                                                name="add_cus"
+                                                                                id="add_cus">เพิ่มลูกค้า</button>
+                                                                        </div>
+                                                                        <% } %>
+
+                                        </thead>
+                                    <tbody>
+                                        <% if ( data_cus.length> 0 ) { %>
+                                            <% data_cus.forEach ( function ( recordPerson, index ) { %>
+                                                <tr>
+                                                    <td>
+                                                        <div style="margin-top: 3%;">
+                                                            <%= recordPerson.username; %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-top: 3.25%;">
+                                                            <%= recordPerson.fname; %>
+                                                                <%= recordPerson.lname; %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-top: 4.5%;" id="money_show">
+                                                            <%= Number(recordPerson.money).toLocaleString() %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="margin-top: 4.5%;">
+                                                            <%= recordPerson.point; %>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <!-- <div class="view">
+                                                    <button class="btn btn-info bts-xs view_data" name="view" value="view"
+                                                        id="<%= recordPerson.id_cus %>">View</button>
+                                                </div> -->
+                                                        <button type="button" class="btn  btn-primary modal_data"
+                                                            id="<%= recordPerson.username; %>">
+                                                            ดูข้อมูล
+                                                        </button>
+                                                    </td>
+                                                    <% if ( branch==0) { %>
+                                                        <td>
+
+                                                            <button type="button" class="btn btn-warning modal_editdata"
+                                                                id="<%= recordPerson.username; %>">
+                                                                แก้ไข
+                                                            </button>
+                                                        </td>
+                                                        <% } %>
+                                                            <% if ( branch==0) { %>
+                                                                <td>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger modal_delete"
+                                                                        id="<%= recordPerson.username; %>">
+                                                                        ลบ
+                                                                    </button>
+                                                                </td>
+                                                                <% } %>
+
+                                                </tr>
+                                                <% } ); %>
+                                                    <% } else { %>
+                                                        <tr>
+                                                            <td colspan="100%">- ไม่มีข้อมูล -</td>
+                                                        </tr>
+                                                        <% } %>
+                                    </tbody>
+
+                                </table>
+                                <div style="float: right;">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <%- include ('view_modal/view_customer'); -%>
+                <%- include ('add_data/insert_modal'); -%>
+                    <%- include ('view_modal/view_admin'); -%>
+                        <%- include ('add_data/insert_customer'); -%>
+                            <%- include ('edit_data/editcustomer'); -%>
+                            <%- include ('js/withdraw_money_js'); -%>
+                            <%- include ('money/insert_money'); -%>
+                          
+        </div>
+
+    </div>
+
+    <%- include ('js/customer_js'); -%>
+        <!-- โชว์ข้อมูลผู้ใช้ -->
+
+</body>
+
+</html>

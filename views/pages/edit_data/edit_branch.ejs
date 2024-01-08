@@ -1,0 +1,27 @@
+
+<div class="modal fade" id="popupupdate_city" tabindex="-1" aria-labelledby="headname" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="title">แก้ไขข้อมูลจังหวัด</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <form action="/submit" method="post" id="insert-form">
+                        <tr>
+                            <td><label for="">จังหวัด</label></td>
+                            <td><input type="text" id="edit_name_city" name="city" class="form-control" required></td>
+                        </tr>
+                </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="update_city_save">แก้ไข</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"  id="close_city_save">ยกเลิก</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+

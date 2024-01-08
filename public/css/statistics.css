@@ -1,0 +1,172 @@
+*{
+    font-family: 'Prompt', serif;
+}
+.container-fluid{
+    background-color: rgb(233, 233, 233);
+    width: 100%;
+    height: fit-content;
+}
+.head{
+    background-color: #144272;
+    width: 100%;
+    
+}
+.head img{
+    width: 20%;
+}
+#content{
+    width: 100%;
+    height: 550px;
+    margin-left: 0.05%;
+    margin-top: 0.5%;
+    background-color: rgb(231, 231, 231);
+
+}
+/* ------------------------------- */
+#imgAdmin{
+    width: 10%;
+    
+}
+li #superadmin{
+    color: white;
+    padding-top:5% ;
+    
+}
+
+.hr1{
+    border:1px solid white;
+   
+}
+
+#box-left ul{
+    padding: 2%;
+    background-color: #144272;
+    list-style-type: none;   
+    height: 700px;
+}
+#box-left ul li {
+    background-color: #144272;
+    margin-bottom: 2%;
+    padding: 2%;
+    padding-left: 5%;
+    
+}
+#box-left ul li a{
+   text-decoration: none;
+   color: rgb(255, 255, 255);
+   width: 20%;
+   
+}
+/* ******************list-menu************** */
+#menu1-1{
+    text-decoration: none;
+    background-color: rgb(0, 89, 133);
+    color: white; 
+}
+/* *******************menu1-1****************** */
+
+#box-left ul  :hover{
+    background-color: rgb(3, 84, 139);      
+    color: rgb(255, 255, 255);
+    padding: 2%;
+    transition: 0.2s;
+    border-radius: 2%;
+}
+
+
+
+#box-left ul li a:active{
+   
+    color: rgb(0, 0, 0);
+       
+}
+
+
+
+/* ***********content************* */
+#box-right{
+    background-color: rgb(237, 237, 237);
+}
+.box1-1{
+    background-color: rgb(255, 255, 255) ;
+    height: 400px;
+    margin: 0 0 0 0;
+}
+#box-right img{
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right:auto;
+
+}
+.box1-2{
+
+    margin-top: 2%;
+}
+.box1-2 .col{
+    margin: 1%;
+    text-align: center;
+   
+    padding: 20px 0;
+    color: white;
+    
+}
+.box1-2 .col:hover{
+    
+    transition: 0.5s;
+    color:rgb(227, 249, 25) ;
+}
+
+
+
+.box1-3{
+    width: 100%;
+    height: 200px;
+    background-color: aliceblue;
+    
+}
+
+/* ************************************ */
+#box-right-right{
+    background-color: #f6fbff;
+}
+#box-right-right img{
+    width: 100%;
+}
+.box2-2{
+    padding: 0%;
+    margin: 0%;
+}
+
+#right1 {
+    width: 100%;
+    background-color: rgb(248, 228, 6);
+    margin-bottom: 5%;
+    padding: 10%;
+   
+}
+
+#right2 {
+    width: 100%;
+    background-color: rgb(0, 190, 54);
+    margin-bottom: 5%;
+    padding: 10%;
+}
+
+#right3 {
+    width: 100%;
+    background-color: rgb(208, 10, 4);
+    margin-bottom: 5%;
+    padding: 10%;
+    color: white;
+}
+
+#graph2{
+    width: 100%;
+    height: 200px;
+}
+/* ************************************* */
+.box1-2 col img{
+    width: 20%;
+
+}

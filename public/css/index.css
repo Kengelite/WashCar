@@ -1,0 +1,95 @@
+*{
+    font-family: 'Prompt', serif;
+    /* background-color: #81d4fa; */
+    margin: 0px;
+    padding: 0px;
+}
+
+.container-fluid{
+    /* background-color: rgb(233, 233, 233); */
+    /* height: fit-content */
+    /* height: 100%; */
+}
+.CarWash{
+    font-size: 2em;
+}
+#content{
+    
+    height: 100vh;
+}
+/* ------------------------------- */
+#imgAdmin{
+    width: 10%;
+    
+}
+li #superadmin{
+    color: white;
+    padding-top:5% ;
+    
+}
+
+.hr1{
+    border:1px solid white;
+   
+}
+
+
+#box-left ul{
+    padding: 0%;
+     background-color: #81d4fa; 
+    list-style-type: none;  
+   height: 100%;  
+}
+#box-left ul li {
+    background-color: #81d4fa;
+    margin-bottom: 2%;
+    padding: 2%;
+    padding-left: 5%;
+    color: black;
+    display: block;
+    width: 100%;
+}
+#box-left ul li a{
+   text-decoration: none;
+   color: rgb(255, 255, 255);
+   /* width: 30%; */
+   
+}
+
+#box-left ul  :hover{
+    background-color: rgb(83, 140, 179);      
+    color: rgb(255, 255, 255);
+    padding: 2%;
+    transition: 0.2s;
+    border-radius: 2%;
+
+}
+#box-left ul .active{
+    background-color: rgb(26, 82, 119);      
+    color: rgb(255, 255, 255);
+    padding: 2%;
+    transition: 0.2s;
+    border-radius: 2%;
+    pointer-events: none;
+}
+
+/* ******************list-menu************** */
+#menu1-1{
+    text-decoration: none;
+    background-color:#81d4fa;
+    color: white; 
+}
+/* *******************menu1-1****************** */
+
+.nav-item:hover{
+    background-color: white;
+    color: black;
+    padding: 2%;
+    transition: 0.2s;
+    border-radius: 2%;
+}
+
+
+
+
+/* ***********content************* */

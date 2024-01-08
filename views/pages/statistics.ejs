@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <link rel="stylesheet" href="css/statistics.css"> -->
+  <!-- <link rel="stylesheet" href="css/setting.css"> -->
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Dinosaur', 'Length'],
+        ['Acrocanthosaurus (top-spined lizard)', 12.2],
+        ['Albertosaurus (Alberta lizard)', 9.1],
+        ['Allosaurus (other lizard)', 12.2],
+        ['Apatosaurus (deceptive lizard)', 22.9],
+        ['Archaeopteryx (ancient wing)', 0.9],
+        ['Argentinosaurus (Argentina lizard)', 36.6],
+        ['Baryonyx (heavy claws)', 9.1],
+        ['Brachiosaurus (arm lizard)', 30.5],
+        ['Ceratosaurus (horned lizard)', 6.1],
+        ['Coelophysis (hollow form)', 2.7],
+        ['Compsognathus (elegant jaw)', 0.9],
+        ['Deinonychus (terrible claw)', 2.7],
+        ['Diplodocus (double beam)', 27.1],
+        ['Dromicelomimus (emu mimic)', 3.4],
+        ['Gallimimus (fowl mimic)', 5.5],
+        ['Mamenchisaurus (Mamenchi lizard)', 21.0],
+        ['Megalosaurus (big lizard)', 7.9],
+        ['Microvenator (small hunter)', 1.2],
+        ['Ornithomimus (bird mimic)', 4.6],
+        ['Oviraptor (egg robber)', 1.5],
+        ['Plateosaurus (flat lizard)', 7.9],
+        ['Sauronithoides (narrow-clawed lizard)', 2.0],
+        ['Seismosaurus (tremor lizard)', 45.7],
+        ['Spinosaurus (spiny lizard)', 12.2],
+        ['Supersaurus (super lizard)', 30.5],
+        ['Tyrannosaurus (tyrant lizard)', 15.2],
+        ['Ultrasaurus (ultra lizard)', 30.5],
+        ['Velociraptor (swift robber)', 1.8]]);
+
+      var options = {
+        title: 'Lengths of dinosaurs, in meters',
+        legend: { position: 'none' },
+      };
+
+      var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+  </script>
+
+  <script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Director (Year)', 'Rotten Tomatoes', 'IMDB'],
+        ['Alfred Hitchcock (1935)', 8.4, 7.9],
+        ['Ralph Thomas (1959)', 6.9, 6.5],
+        ['Don Sharp (1978)', 6.5, 6.4],
+        ['James Hawes (2008)', 4.4, 6.2]
+      ]);
+
+      var options = {
+        title: 'The decline of \'The 39 Steps\'',
+        vAxis: { title: 'Accumulated Rating' },
+        isStacked: true
+      };
+
+      var chart = new google.visualization.SteppedAreaChart(document.getElementById('chart_b'));
+
+      chart.draw(data, options);
+    }
+  </script>
+
+  <script type="text/javascript">
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Task', 'Hours per Day'],
+        ['Work', 11],
+        ['Eat', 2],
+        ['Commute', 2],
+        ['Watch TV', 2],
+        ['Sleep', 7]
+      ]);
+
+      var options = {
+        title: 'My Daily Activities',
+        pieHole: 0.4,
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+      chart.draw(data, options);
+    }
+  </script>
+
+  <title>ข้อมูลสถิติ</title>
+</head>
+
+<body>
+  <div class="container-fluid">
+
+    <div class="row" id="content">
+
+      <div class="col-2 px-0" id="box-left">
+        <ul>
+          <li class="CarWash"><a href="/index">CarWash</a></li>
+          <li> <img id="imgAdmin" src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt=""> <span
+              id="superadmin">
+              <%= admin_name %>
+            </span></li>
+          <hr class="hr1">
+          <li><a href="/index">ภาพรวมระบบ</a></li>
+          <li><a href="/washcarinsystem">ตู้ในระบบ</a></li>
+          <li class="active"><a href="/statistics">ข้อมูลสถิติ</a></li>
+          <% if ( branch==0) { %>
+            <li><a href="/show_admin">แสดงบัญชีผู้ประกอบการ</a></li>
+            <% } %>
+              <li><a href="/show_cus">แสดงบัญชีลูกค้า</a></li>
+              <% if ( branch==0) { %>
+                <li><a href="/show_admin">จัดการข้อมูลสาขา</a></li>
+                <% } %>
+                  <li><a href="/managepromotion">จัดการโปรโมชัน</a></li>
+                  <li><a href="/logout">ออกจากระบบ</a></li>
+        </ul>
+      </div>
+      <div class="col-10 ">
+        <div class="row">
+          <div class="col-9">
+            <div class="row ">
+              <div class="col-12" id="box-right">
+                <div class="card  " style="width: 100%;">
+                  <div class="card-body">
+                    <div class="card-title">ยอดเงินรวม
+                      <div class="card-menu"> <span>รูปแบบ : </span>
+                        <select name="" id="" class="form-control w-25">
+                          <option value="">วัน</option>
+                          <option value="">เดือน</option>
+                          <option value="">ปี</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="box_payment_money">
+                      <div id="chart_div" style="width: 100%; height: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-4">
+                    <div class="card  " style="width: 100%;">
+                      <div class="card-body">
+                        <h5 class="card-title">ยอดเงินรวม : บาท </h5>
+                        <div class="card-text cardtxt" id="total_price">
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card" style="width: 100%;">
+                      <div class="card-body">
+                        <h5 class="card-title">ยอดเงินรวมสรุปเดือน</h5>
+                        <div class="card-text cardtxt" id="total_price_month">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="card" style="width: 100%;">
+                      <div class="card-body">
+                        <h5 class="card-title">จำนวนตู้</h5>
+                        <div class="card-text cardtxt">
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="box1-2">
+
+                  <div class="card mt-3" style="width: 100%;">
+                    <div class="card-body">
+                      <!-- <h5 class="card-title">จำนวนตู้</h5> -->
+                      <div class="box1-3">
+                        <div id="chart_b" style="width: 100%; height: 400px;"></div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="col-3 px-0">
+            <div class="box_rigt">
+              <div class="card" style="width: 100%;">
+                <div class="card-body">
+                  <!-- <h5 class="card-title">จำนวนตู้</h5> -->
+                  <div class="box1-3">
+                    <div id="donutchart" style="width: 100%; height: 100%;"></div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+            <div class="colum mt-3">
+              <div class="alert alert-success box box_active" role="alert">
+                ตู้ที่สามารถใช้งาน <%= data_use[0].usecar %> เครื่อง
+              </div>
+              <div class="alert alert-warning box box_problem" role="alert">
+                ตู้มีปัญหา <%= data_accident[0].accident %> เครื่อง
+              </div>
+              <div class="alert alert-danger box box_damaged" role="alert">
+                ตู้เสีย <%= data_damaged[0].damaged %> เครื่อง
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+
+</body>
+
+</html>

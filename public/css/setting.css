@@ -1,0 +1,101 @@
+
+
+/* ***********content************* */
+/* #box-right{
+    background-color: rgb(255, 255, 255);
+    height: 700px;
+    
+    
+}
+.box1-1{
+    background-color: rgb(255, 255, 255) ;
+    margin: 0;
+    padding: 2%;
+}
+#box-right img{
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right:auto;
+
+} */
+
+/* .box1-2{
+
+    margin-top: 2%;
+}
+.box1-2 .col{
+    margin: 1%;
+    text-align: center;
+    background-color: #144272;
+    padding: 20px 0;
+    color: white;
+    
+}
+.box1-2 .col:hover{
+    background-color: #07203a;
+    transition: 0.5s;
+    color:rgb(227, 249, 25) ;
+} */
+
+
+/* 
+.box1-3{
+    width: 100%;
+    height: 200px;
+    background-color: aliceblue;
+    
+} */
+
+/* ************************************ */
+
+
+/* ******************************************************* */
+div.addAdmin{
+    text-align: end;
+    
+}
+div.addAdmin button{
+    background-color: green;
+    color: white;
+    padding: 2%;
+    border: 0px ;
+    margin-right:3%;
+    padding: 5px;
+    border-radius: 5px;
+   
+}
+div.addAdmin button:hover{
+    background-color: rgb(81, 163, 81);
+    color: white;
+    transition: 0.5s;
+    padding: 5%;
+    border: 0px ;
+    margin-right:3%;
+
+}
+ button a{
+    text-decoration: none;
+    color: white;
+}
+div.delete button{
+    width: 100%;
+    border: 0px;
+    padding: 10px;
+    color: white;
+    margin-right: 0%;
+    font-size: small;
+    
+    
+}
+div.edit button{
+    width: 100%;
+    padding: 10px;
+    font-size: small;
+    margin-left: 30%;
+}
+td#deleteedit{
+    display: flex;
+    width: 100%;
+}
+

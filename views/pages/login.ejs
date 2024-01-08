@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Login</title>
+    <style>
+        .container{
+            padding-top: 4%;
+        }
+        .login-wrap{
+            border-radius: 2rem;
+        }
+        .login-html{
+            border-radius: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="login-wrap">
+            <div class="login-html">
+                <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign
+                    In</label>
+                <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"> </label>
+                <div class="login-form">
+                    <div class="sign-in-htm">
+                        <div class="group">
+                            <label for="user" class="label">บัญชีผู้ใช้</label>
+                            <input id="username" type="text" class="input">
+                        </div>
+                        <div class="group">
+                            <label for="pass" class="label">รหัสผ่าน</label>
+                            <input id="password" type="password" class="input" data-type="password">
+                        </div>
+                        <div class="group">
+                            <input type="submit" class="button " id="btn-login" value="เข้าสู่ระบบ">
+                        </div>
+                        <div class="hr"></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#btn-login').click(function () {
+                var us = $('#username').val();
+                var pss = $('#password').val();
+                console.log(us)
+                console.log(pss)
+                if (us != '' && pss != '') {
+                    $.ajax({
+                        url: '/data/check_admin',
+                        method: 'post',
+                        data: {
+                            username: us,
+                            password: pss
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            $('username').val(data.username);
+                            if (data.success > 0) {
+                                Swal.fire(
+                                    'ล็อคอินสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/index"
+                                })
+
+                            } else {
+                                Swal.fire(
+                                    'ข้อมูลไม่ถูกต้อง',
+                                    '',
+                                    'warning'
+                                )
+                            }
+
+                            // console.log(data)
+                            // $('.txt').html(data.data[0].name);
+                            // $('#myModal').modal();
+                        }
+                    });
+                } else {
+                    Swal.fire(
+                        'กรุณากรอกข้อมูลให้ครบถ้วน',
+                        '',
+                        'warning'
+                    )
+                }
+
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

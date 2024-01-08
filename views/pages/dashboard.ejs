@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="/css/dashbord.css">
+  <link rel="stylesheet" href="css/setting.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Capriola&family=Mali:wght@300&family=Sniglet&display=swap"
+    rel="stylesheet">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <title>Dashboard</title>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['bar'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+      var data_total_momey = JSON.parse('<%- data_chart_total_money %>')
+      console.log(Object.keys(data_total_momey).length)
+      data_total_momey.unshift(['เวลา', 'ยอดเงินรายรับ ( บาท )'])
+      if (Object.keys(data_total_momey).length == 1) {
+        data_total_momey.push(['0', 0])
+      }
+      var data = google.visualization.arrayToDataTable(
+        data_total_momey
+        // [
+
+        //   ['Year', 'Sales', 'Expenses', 'Profit'],
+        //   ['2014', 1000, 400, 200],
+        //   ['2015', 1170, 460, 250],
+        //   ['2016', 660, 1120, 300],
+        //   ['2017', 1030, 540, 350]
+        // ]
+      );
+
+      var options = {
+        // title: 'ยอดเงินสรุป',
+        chart: {
+          title: 'ยอดเงินสรุป',
+          subtitle: 'วันที่ ' + new Date().getDate() + ' / ' + (parseInt(new Date().getMonth()) + 1) + " / " + new Date().getFullYear(),
+        }
+        // curveType: 'function',
+        // legend: { position: 'bottom' }
+      };
+
+      // var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+      // chart.draw(data, options);
+      var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+  </script>
+  <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> -->
+  <script type="text/javascript">
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      // บอกตู้แต่ละตู้ใช้งานเยอะขนาดไหน
+      var data_total_use_group = JSON.parse('<%- result_chart_use_group %>')
+      console.log(Object.keys(data_total_use_group).length)
+      data_total_use_group.unshift(['Task', 'จำนวนการใช้งาน'])
+      if (Object.keys(data_total_use_group).length == 1) {
+        data_total_use_group.push(['ยังไม่มีการใช้งาน', 0])
+      }
+      console.log(data_total_use_group)
+      var data = google.visualization.arrayToDataTable(
+
+        data_total_use_group
+        //[
+        // ['Task', 'จำนวนการใช้งาน'],
+        //   [ 'กังสดาล', 2 ], [ 'ชุมแพ', 1 ]
+        //]
+      );
+
+      var options = {
+        title: 'อัตราส่วนการใช้งานแต่ละตู้',
+        is3D: true,
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+      chart.draw(data, options);
+    }
+  </script>
+
+
+
+</head>
+
+<body>
+  <div class="container-fluid">
+    <!-- <div class="head">
+      <a href="/index"> <img src="img/logo.png" alt="logo" class="img-logo"></a>
+    </div> -->
+
+    <div class="row" id="content">
+
+      <div class="col-2 px-0" id="box-left">
+        <ul>
+          <li class="CarWash"><a href="/index">CarWash</a></li>
+          <li > <img id="imgAdmin" src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt=""> 
+            <span id="superadmin" >
+              <%= result_dataadmin[0].admin_name %>
+            </span></li>
+          <hr class="hr1">
+          <li class="active"><a href="/index">ภาพรวมระบบ</a></li>
+          <% if ( branch!=0) { %>
+            <li><a style="cursor: pointer;" class="modal_withdraw_money">ถอนเงิน</a></li>
+            <% } %>
+              <% if ( branch!=0) { %>
+                <li><a href="/transection">ธุรกรรม</a></li>
+                <% } %>
+                  <li><a href="/washcarinsystem">ตู้ในระบบ</a></li>
+
+                  <% if ( branch==0) { %>
+                    <li><a href="/show_admin">แสดงบัญชีผู้ประกอบการ</a></li>
+                    <% } %>
+                      <li><a href="/show_cus">แสดงบัญชีลูกค้า</a></li>
+                      <% if ( branch==0) { %>
+                        <li><a href="/show_branch">จัดการข้อมูลสาขา</a></li>
+                        <% } %>
+                          <li><a href="/managepromotion">จัดการโปรโมชัน</a></li>
+                          <li><a href="/logout">ออกจากระบบ</a></li>
+        </ul>
+      </div>
+
+      <div class="col-10 ">
+        <div class="row">
+          <div class="col-9">
+            <div class="row">
+              <div class="col-4">
+                <div class="card  " style="width: 100%;">
+                  <div class="card-body">
+                    <h5 class="card-title">ยอดเงินรวมสะสม</h5>
+                    <div class="card-text cardtxt" id="total_price">
+                      <%= Number(result_price[0].total_price).toLocaleString(); %>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card" style="width: 100%;">
+                  <div class="card-body">
+                    <h5 class="card-title">ยอดเงินคงเหลือสะสม </h5>
+                    <div class="card-text cardtxt">
+
+                      <%= Number(result_price[0].total_price - (result_sum_withdraw[0].sum_withdraw==null ? 0:
+                        result_sum_withdraw[0].sum_withdraw )).toLocaleString()%>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card" style="width: 100%;">
+                  <div class="card-body">
+                    <h5 class="card-title">จำนวนตู้</h5>
+                    <div class="card-text cardtxt">
+                      <%= data_count_carwash[0].total_car %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-4">
+                <div class="card  " style="width: 100%;">
+                  <div class="card-body">
+                    <h5 class="card-title">ยอดเงินรวมต่อเดือน </h5>
+                    <div class="card-text cardtxt">
+                      <%= result_pricemonth[0].total_pricemonth==null ? 0: result_pricemonth[0].total_pricemonth %>
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card" style="width: 100%;">
+                  <div class="card-body">
+                    <h5 class="card-title">ยอดเงินเฉลี่ยต่อเดือน</h5>
+                    <div class="card-text cardtxt" id="total_price_month">
+                      <%= result_avg_money[0].avg_total==null ? 0 : parseFloat(result_avg_money[0].avg_total).toFixed(2)
+                        %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="card" style="width: 100%;">
+                  <div class="card-body">
+                    <h5 class="card-title">ยอดจำนวนการใช้งาน</h5>
+                    <div class="card-text cardtxt">
+                      <%= result_count_use[0].total==null ? 0 : result_count_use[0].total %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row mt-3">
+              <div class="col-12" id="box-right">
+                <div class="card  " style="width: 100%;">
+                  <div class="card-body">
+                    <!-- <div class="card-title">ยอดเงินรวม -->
+                    <div class="card-menu"> <span>รูปแบบ : </span>
+                      <select name="" id="" class="form-control choose_money_total mb-3 w-25">
+                        <option value="day">วัน</option>
+                        <option value="month">เดือน</option>
+                        <option value="year">ปี</option>
+                      </select>
+                    </div>
+                    <!-- </div> -->
+                    <div class="box_payment_money">
+                      <div id="chart_div" style="width: 100%; height: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-3 px-0">
+
+            <div class="box_rigt">
+              <div class="card" style="width: 100%;">
+                <div class="card-body">
+                  <!-- <h5 class="card-title">จำนวนตู้</h5> -->
+                  <div class="box1-3">
+                    <div id="piechart_3d" style="width: 100%; height: 100%;"></div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+            <div class="colum mt-3">
+              <div class="alert alert-primary box box_active" role="alert">
+                ตู้ที่กำลังเปิดการใช้งาน <%= data_use[0].usecar %>  / <%= all_car[0].all_car %> เครื่อง
+              </div>
+              <div class="alert alert-success box box_active" role="alert">
+                ตู้ที่พร้อมใช้งาน <%= use_car %> เครื่อง
+              </div>
+              <div class="alert alert-warning box box_problem" role="alert">
+                ตู้มีปัญหา <%= accident_car %> เครื่อง
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <%- include ('js/dashboard_js'); -%>
+  <%- include ('js/withdraw_money_js'); -%>
+  <%- include ('money/insert_money'); -%>
+
+</body>
+
+</html>

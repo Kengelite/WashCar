@@ -1,0 +1,25 @@
+<div class="modal fade" id="popupedit_withdraw_money" tabindex="-1" aria-labelledby="headname" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="title">ข้อมูลการแจ้งถอนเงิน</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <form action="/submit" method="post" id="insert-form">
+                        <tr>
+                            <td><label style="margin-top: 4%; margin-left: 5%;" for="">ระบุจำนวนเงิน</label></td>
+                            <td><input type="text" id="edit_name_money" name="money" class="form-control" required></td>
+                        </tr>
+                </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="edit_withdraw_money">ยืนยัน</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"  >ยกเลิก</button>
+
+            </div>
+        </div>
+    </div>
+</div>

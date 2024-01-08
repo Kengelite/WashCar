@@ -1,0 +1,235 @@
+<script>
+    $(document).ready(function () {
+        $('#add_city').click(function () {
+            $('#popupinsert_city').modal('show');
+        })
+        // var mm = $(this).attr("money_show");
+        // var counterElement = document.getElementById("money_show");
+        // counterElement.innerHTML = Number(mm).toLocaleString();
+        $('#add_city_save').click(function () {
+            // var uid = $(this).attr("id");
+            // console.log(uid)
+            let name_city = $('#name_city').val()
+            console.log(name_city)
+            $.ajax({
+                url: '/data/insert_city',
+                method: 'post',
+                data: { name_city: name_city },
+                success: function (data) {
+
+                    if (data.status == 'error') {
+                        Swal.fire(
+                            'เกิดข้อผิดพลาด',
+                            'มีข้อมูลในระบบอยู่แล้ว',
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'เพิ่มข้อมูลเรียบร้อย',
+                            '',
+                            'success'
+                        ).then(() => {
+                            $('#name_city').val('')
+                            window.location = "/show_branch"
+                        })
+
+                    }
+                    // $('#popupdata').modal('show');
+                    // $('#headname_customer').html("ข้อมูล " + data.data[0].fname + ' ' + data.data[0].lname);
+                    // // $('.id').html(data.data[0].id_cus);
+                    // $('.email').html(data.data[0].username);
+                    // $('.name').html(data.data[0].fname + '  ' + data.data[0].lname);
+                    // $('.money').html(Number(data.data[0].money).toLocaleString() + ' ฿');
+                    // $('.point').html(Number(data.data[0].balance_point).toLocaleString());
+                    // $('.tel ').html(data.data[0].tel);
+                    // console.log(data.data[0].total_use)
+                    // if (data.data[0].total_use == null) {
+                    //     $('.money_use ').html(0);
+                    // } else {
+                    //     $('.money_use ').html(data.data[0].total_use);
+                    // }
+
+
+                    // });
+
+                }
+            });
+        });
+        $('.modal_delete_city').click(function () {
+            var id_city = $(this).attr("id");
+            // console.log(uid)
+            Swal.fire({
+                title: 'คุณต้องการลบข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/delete_city',
+                        method: 'post',
+                        data: { id_city: id_city },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'ลบข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_branch"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ลบข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ลบข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
+        var id_city
+        $('.modal_update_city').click(function () {
+            id_city = $(this).attr("id");
+            console.log(id_city)
+            $.ajax({
+                url: '/data/viewcity',
+                method: 'post',
+                data: { id_city: id_city },
+                success: function (data) {
+                    if (data.status == 'success') {
+                        $('#popupupdate_city').modal('show');
+                        console.log(data.data[0].name_city)
+                        $('#edit_name_city').val(data.data[0].name_city);
+                    } else {
+                        Swal.fire(
+                            'ข้อมูลผิดพลาด',
+                            '',
+                            'error'
+                        )
+                    }
+
+                }, error: function (error) {
+                    Swal.fire(
+                        'ข้อมูลผิดพลาด',
+                        '',
+                        'error'
+                    )
+                }
+            });
+        })
+        $('#update_city_save').click(function () {
+
+            console.log(id_city)
+            let name_city = $('#edit_name_city').val()
+
+            Swal.fire({
+                title: 'คุณต้องการแก้ไขข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/update_city',
+                        method: 'post',
+                        data: { id_city: id_city, name_city: name_city },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'แก้ไขข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_branch"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ข้อมูลผิดพลาด',
+                                    'มีข้อมูลนี้อยู่ใยระบบแล้ว',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+
+        });
+        $('#add_branch').click(function () {
+            $('#popupinsert_branch').modal('show');
+        })
+        $('#add_branch_save').click(function () {
+            // var uid = $(this).attr("id");
+            // console.log(uid)
+            let name_branch = $('#name_branch').val()
+            console.log(name_branch)
+            $.ajax({
+                url: '/data/insert_branch',
+                method: 'post',
+                data: { name_branch: name_branch },
+                success: function (data) {
+
+                    if (data.status == 'error') {
+                        Swal.fire(
+                            'เกิดข้อผิดพลาด',
+                            'มีข้อมูลในระบบอยู่แล้ว',
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'เพิ่มข้อมูลเรียบร้อย',
+                            '',
+                            'success'
+                        ).then(() => {
+                            $('#name_city').val('')
+                            window.location = "/show_branch"
+                        })
+
+                    }
+                    // $('#popupdata').modal('show');
+                    // $('#headname_customer').html("ข้อมูล " + data.data[0].fname + ' ' + data.data[0].lname);
+                    // // $('.id').html(data.data[0].id_cus);
+                    // $('.email').html(data.data[0].username);
+                    // $('.name').html(data.data[0].fname + '  ' + data.data[0].lname);
+                    // $('.money').html(Number(data.data[0].money).toLocaleString() + ' ฿');
+                    // $('.point').html(Number(data.data[0].balance_point).toLocaleString());
+                    // $('.tel ').html(data.data[0].tel);
+                    // console.log(data.data[0].total_use)
+                    // if (data.data[0].total_use == null) {
+                    //     $('.money_use ').html(0);
+                    // } else {
+                    //     $('.money_use ').html(data.data[0].total_use);
+                    // }
+
+
+                    // });
+
+                }
+            });
+        });
+
+
+
+
+    });
+
+</script>

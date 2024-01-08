@@ -1,0 +1,102 @@
+<!-- Modal -->
+<div class="modal fade" id="popup_editadmindata" tabindex="-1" aria-labelledby="headname" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 headname_customer"> </h1>
+                <button type="button" class="btn-close Close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+
+                    <!-- <tr>
+                        <th scope="row">รหัสผู้ใช้งาน</th>
+                        <td class="id"> 1 </td>
+                    </tr> -->
+                    <tr>
+                        <th scope="row">บัญชีผู้ใช้งาน</th>
+                        <td>
+                            <input type="text" class="form-control email_edit " disabled value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ชื่อผู้ใช้งาน </th>
+                        <td>
+                            <input type="text" class="form-control name_edit" value="">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <th scope="row">รหัสผ่าน </th>
+                        <td class="d-flex">
+
+                            <input type="password" class="form-control pass-swap pass_edit" placeholder="รหัสผ่าน">
+                            <span class="input-group-append mt-2 icon_pass">
+                                <i class="fa fa-eye"></i>
+                            </span>
+
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ยืนยันรหัสผ่าน </th>
+                        <td class="d-flex">
+
+                            <input type="password" class="form-control pass-swap pass_two_edit" placeholder="ยืนยันรหัสผ่าน">
+                            <span class="input-group-append mt-2 icon_pass">
+                                <i class="fa fa-eye"></i>
+                            </span>
+
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">สาขา </th>
+                        <td>
+                            <input list="branchs" name="branch" class="form-control branch_edit">
+                            <datalist id="branchs">
+
+                            </datalist>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">จังหวัด </th>
+                        <td>
+                            <input list="citys" name="branch" class="form-control city_edit">
+                            <datalist id="citys">
+
+                            </datalist>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">เบอร์โทรติดต่อ </th>
+                        <td>
+                            <input type="text" class="form-control tel_edit" value="">
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary Close" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success confirm">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        const icon = this.querySelector('i');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        icon.classList.toggle('fa-eye-slash');
+    });
+
+
+</script>

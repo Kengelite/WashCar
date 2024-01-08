@@ -1,0 +1,52 @@
+<!-- Modal -->
+<div class="modal fade" id="popup_editadmindata_withdraw" tabindex="-1" aria-labelledby="headname" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 headname_customer"> </h1>
+                <button type="button" class="btn-close Close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+
+                    <!-- <tr>
+                        <th scope="row">รหัสผู้ใช้งาน</th>
+                        <td class="id"> 1 </td>
+                    </tr> -->
+                    <tr>
+                        <th scope="row">บัญชีผู้ใช้งาน</th>
+                        <td>
+                            <input type="text" class="form-control email_edit " disabled value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ยอดเงินถอน </th>
+                        <td>
+                            <input type="text" class="form-control money_edit" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">สถานะ </th>
+                        <td>
+                            <select name="status"  class="form-control status_edit">
+                                <option value="1">ยืนยัน</option>
+                                <option value="0">รอดำเนินการ</option>
+                                <option value="2">ยกเลิก</option>
+                            </select>
+                            <!-- <input list="branchs" name="branch" class="form-control branch_edit">
+                            <datalist id="branchs">
+
+                            </datalist> -->
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary Close" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="button" id="" class="btn btn-success withdraw_confirm">ยืนยัน</button>
+            </div>
+        </div>
+    </div>
+</div>
+

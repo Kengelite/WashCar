@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/managePromotion.css">
+  <link rel="stylesheet" href="css/setting.css">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+  <link rel="stylesheet" href="/css/dashbord.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Prompt">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawVisualization);
+
+    function drawVisualization() {
+      // Some raw data (not necessarily accurate)
+      var data = google.visualization.arrayToDataTable([
+        ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+        ['2004/05', 165, 938, 522, 998, 450, 614.6],
+        ['2005/06', 135, 1120, 599, 1268, 288, 682],
+        ['2006/07', 157, 1167, 587, 807, 397, 623],
+        ['2007/08', 139, 1110, 615, 968, 215, 609.4],
+        ['2008/09', 136, 691, 629, 1026, 366, 569.6]
+      ]);
+
+      var options = {
+        title: 'Monthly Coffee Production by Country',
+        vAxis: { title: 'Cups' },
+        hAxis: { title: 'Month' },
+        seriesType: 'bars',
+        series: { 5: { type: 'line' } }
+      };
+
+      var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+  </script>
+  <script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+        ['Task', 'Hours per Day'],
+        ['Work', 11],
+        ['Eat', 2],
+        ['Commute', 2],
+        ['Watch TV', 2],
+        ['Sleep', 7]
+      ]);
+
+      var options = {
+        title: 'My Daily Activities'
+      };
+
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+      chart.draw(data, options);
+    }
+  </script>
+
+
+  <title>Dashboard</title>
+</head>
+
+<body>
+  <div class="container-fluid">
+
+    <div class="row" id="content">
+
+      <div class="col-2 px-0" id="box-left">
+        <ul>
+          <li class="CarWash"><a href="/index">CarWash</a></li>
+          <li> <img id="imgAdmin" src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt=""> <span
+              id="superadmin">
+              <%= admin_name %>
+            </span></li>
+          <hr class="hr1">
+          <li><a href="/index">ภาพรวมระบบ</a></li>
+          <% if ( branch!=0) { %>
+            <li><a style="cursor: pointer;" class="modal_withdraw_money">ถอนเงิน</a></li>
+            <% } %>
+              <% if ( branch!=0) { %>
+                <li><a href="/transection">ธุรกรรม</a></li>
+                <% } %>
+                  <li><a href="/washcarinsystem">ตู้ในระบบ</a></li>
+
+                  <% if ( branch==0) { %>
+                    <li><a href="/show_admin">แสดงบัญชีผู้ประกอบการ</a></li>
+                    <% } %>
+                      <li><a href="/show_cus">แสดงบัญชีลูกค้า</a></li>
+                      <% if ( branch==0) { %>
+                        <li><a href="/show_branch">จัดการข้อมูลสาขา</a></li>
+                        <% } %>
+                          <li class="active"><a href="/managepromotion">จัดการโปรโมชัน</a></li>
+                          <li><a href="/logout">ออกจากระบบ</a></li>
+        </ul>
+      </div>
+
+
+      <div class="col-10 ">
+        <div class="row">
+          <div class="col">
+            <div class="card" style="width: 100%;">
+              <div class="card-body">
+                <h5 class="card-title">จำนวนโปรโมชั่นทั้งหมด</h5>
+                <div class="card-text cardtxt">
+                  <%= result_total[0].total_amount; %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card" style="width: 100%;">
+              <div class="card-body">
+                <h5 class="card-title">--------------</h5>
+                <div class="card-text cardtxt">
+                  <%= result_total[0].total_price; %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card" style="width: 100%;">
+              <div class="card-body">
+                <h5 class="card-title">-------------------</h5>
+                <div class="card-text cardtxt">
+                  <%= result_count_promotion[0].count_promotion; %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card" style="width: 100%;">
+              <div class="card-body">
+                <h5 class="card-title">จำนวนที่มีการใช้งาน</h5>
+                <div class="card-text cardtxt">
+                  <%= result_count_promotion[0].count_promotion; %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3 ml-5">
+          <div class="col">
+            <div class="card" style="width: 100%;">
+              <div class="card-body">
+                <!-- <div class="card-title">
+                  <h2>โปรโมชัน</h2>
+                </div> -->
+
+                <div style=" display: flex;">
+                  <span class="mt-1 ">สาขา : </span>
+                  <select style="display: inline-block; margin-left: 0.5em;" name="" id="" class="form-control w-25 ">
+                    <option value="">ทั้งหมด</option>
+
+                  </select>
+
+                  <div style="margin-left: auto;">
+                    <button class="btn btn-success " name="add" id="add_promotion">เพิ่มโปรโมชัน</button>
+                  </div>
+                </div>
+                <table class="table table-striped">
+                  <thead>
+                    <thead>
+                      <th scope="col">ลำดับ</th>
+                      <th scope="col">ชื่อ</th>
+                      <th scope="col">รูปแบบ</th>
+                      <th scope="col">มูลค่า</th>
+                      <th scope="col">จำนวน</th>
+                      <th scope="col">คงเหลือ</th>
+                      <th scope="col">สถานะ</th>
+                      <% if ( branch==0) { %>
+                        <th scope="col">สาขา</th>
+                        <% } %>
+                          <th scope="col"></th>
+                          <th scope="col"></th>
+
+                          </th>
+                          <th scope="col">
+                    </thead>
+                  <tbody style="font-size: 1em;margin-top: 5px;">
+                    <% if ( data_cus.length> 0 ) { %>
+                      <% data_cus.forEach ( function ( recordPerson, index ) { %>
+                        <tr>
+                          <td style="padding: 20px;">
+                            <%= index+1 %>
+                          </td>
+                          <td style="padding: 20px;">
+                          
+                              <%= recordPerson.ref; %>
+                          </td>
+                          <td style="padding: 20px;">
+                            <%= recordPerson.name; %>
+                          </td>
+                          <td style="padding: 20px;">
+                            <%= recordPerson.price_promotion; %>
+                          </td>
+                          <td style="padding: 20px;">
+                            <%= recordPerson.amount; %>
+                          </td>
+                          <td style="padding: 20px;">
+
+                          </td>
+                          <% if ( branch==0) { %>
+                            <td style="padding: 20px;">
+                              <%= recordPerson.name_branch; %>
+                            </td>
+
+                            <% } %>
+                              <td>
+                                <div style="margin-top: 10%;" id="money_show">
+                                  <% if (recordPerson.status==1) { %>
+                                    <i style="color: green; font-size: 1.4em;" class="uil uil-check-square"></i>
+                                    <% } else if (recordPerson.status==2) { %>
+                                      <i style="color: red; font-size: 1.6em;" class="uil uil-times-square"></i>
+                                      <% } else { %>
+                                        <%= "ยกเลิก" %>
+                                          <% } %>
+                                </div>
+                              </td>
+                              <td style="padding: 10px;">
+                                <!-- <div class="view">
+                              <button class="btn btn-info bts-xs view_data" name="view" value="view"
+                                  id="<%= recordPerson.id_cus %>">View</button>
+                          </div> -->
+                                <button type="button" class="btn  btn-primary modal_data_promotion"
+                                  id="<%= recordPerson.id_promo; %>">
+                                  ดูข้อมูล
+                                </button>
+                              </td>
+                              <td style="padding: 10px;">
+                                <button class="btn  btn-warning modal_edit_promotion"
+                                  id="<%= recordPerson.id_promo; %>">แก้ไข</button>
+                              </td>
+                              </td>
+
+                              <td style="padding: 10px;"><button class="btn  btn-danger delete_promotion">ลบ</button>
+                              </td>
+                        </tr>
+                        <% } ); %>
+                          <% } else { %>
+                            <tr>
+                              <td colspan="100%">- ไม่มีข้อมูล -</td>
+                            </tr>
+                            <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include ('money/insert_money'); -%>
+      <%- include ('add_data/insert_promotion'); -%>
+        <%- include ('view_modal/view_promotion'); -%>
+          <%- include ('edit_data/edit_promotion'); -%>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script>
+
+              let id_admin;
+
+              $('#add_promotion').click(function () {
+                $("#popupdinsert_promotion").modal('show');
+                $.ajax({
+                  url: '/data/check_add_promotion',
+                  method: 'post',
+                  data: {},
+                  success: function (data) {
+                    console.log(data.result_type)
+                    $('#add_type').append(` <select id="add_name_type" name="type" class="form-select" required>
+                            </select>`);
+                    for (var obj of data.result_type) {
+                      $('#add_name_type').append(`<option value="${obj.id_type}">${obj.name}</option>`);
+                    }
+                    console.log(data.result_branch)
+                    if (data.branch != 0) {
+                      $('.add_name_branch').val(data.result_branch[0].name_branch);
+                    } else {
+                      console.log("sasas")
+                      $(".add_name_branch").remove();
+                      $('#branch_select').append(` <select name="name_branch" class="form-select add_name_branch" required>
+                            </select>`);
+                      for (var obj of data.result_branch) {
+                        $('.add_name_branch').append(`<option value="${obj.id_branch}">${obj.name_branch}</option>`);
+                      }
+                    }
+
+
+                  }
+                });
+              });
+              $('#save_add_promotion').click(function () {
+                  let ref = $('#add_name_ref').val()
+                  let price = $('#add_name_price').val()
+                  let amount = $('#add_name_amount').val()
+
+                  let time_on = $('#add_name_time_on').val()
+                  let time_off = $('#add_name_time_off').val()
+                  let status = $('#add_name_status').val()
+                  let type = $('#add_name_type').val()
+                  // var addid = $(this).attr("id");
+             
+                  Swal.fire({
+                    title: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+                    // icon: 'warning',
+                    showDenyButton: true,
+                    confirmButtonText: 'ยืนยัน',
+                    denyButtonText: `ยกเลิก`,
+                  }).then((result) => {
+                    $.ajax({
+                      url: '/data/add_promotion',
+                      method: 'post',
+                      data: {
+                        ref,price,amount,
+                        time_on,time_off,
+                        status,type
+                      },
+                      success: function (data) {
+                        console.log(data)
+                        if (data.status == "error") {
+                          Swal.fire(
+                            'เกิดข้อผิดพลาด',
+                            '',
+                            'error'
+                          )
+                        } else {
+                          $('#popupdinsert_promotion').modal('hide');
+                          Swal.fire(
+                            'บันทึกข้อมูลสำเร็จ',
+                            '',
+                            'success'
+                          ).then(() => {
+                            window.location = "/managepromotion"
+                          })
+                        }
+                        // });
+
+                      }
+                    });
+                  });
+                });
+               $('#insert_withdraw_money').click(function () {
+                  // var addid = $(this).attr("id");      
+                  let money = $('#name_money').val()
+                  // console.log(uid)
+                  $.ajax({
+                    url: '/data/insert_withdraw',
+                    method: 'post',
+                    data: { money },
+                    success: function (data) {
+                      console.log(data)
+                      if (data.status == "error") {
+                        Swal.fire(
+                          'ยอดเงินไม่เพียงพอ',
+                          '',
+                          'error'
+                        )
+                      } else {
+                        Swal.fire(
+                          'บันทึกข้อมูลสำเร็จ',
+                          '',
+                          'success'
+                        ).then(() => {
+                          window.location = "/index"
+                        })
+                      }
+                      // });
+
+                    }
+                  });
+                });
+              $(document).ready(function () {
+                $('.modal_data_promotion').click(function () {
+                  var addid = $(this).attr("id");
+                  $('#popupdata_promotion').modal('show');
+                  $.ajax({
+                    url: '/data/check_data_promotion',
+                    method: 'post',
+                    data: { id: addid },
+                    success: function (data) {
+                      console.log(data)
+                      $('.ref').text(data.data[0].ref);
+                      $('.price').text(data.data[0].price);
+                      $('.amount').text(data.data[0].amount);
+                      $('.type').text(data.data[0].name);
+                      $('.time_on').text(data.data[0].time_on);
+                      $('.time_off').text(data.data[0].time_off);
+                      $('.name_branch').text(data.data[0].name_branch);
+                      if (parseInt(data.data[0].status) == 1) {
+                        $('.status').text("เปิดการใช้งาน");
+                      } else {
+                        $('.status').text("ปิดการใช้งาน");
+                      }
+                      // });
+
+                    }
+                  });
+                  // console.log(uid)
+                });
+                $('#insert_withdraw_money').click(function () {
+                  // var addid = $(this).attr("id");      
+                  let money = $('#name_money').val()
+                  // console.log(uid)
+                  $.ajax({
+                    url: '/data/insert_withdraw',
+                    method: 'post',
+                    data: { money },
+                    success: function (data) {
+                      console.log(data)
+                      if (data.status == "error") {
+                        Swal.fire(
+                          'ยอดเงินไม่เพียงพอ',
+                          '',
+                          'error'
+                        )
+                      } else {
+                        Swal.fire(
+                          'บันทึกข้อมูลสำเร็จ',
+                          '',
+                          'success'
+                        ).then(() => {
+                          window.location = "/index"
+                        })
+                      }
+                      // });
+
+                    }
+                  });
+                });
+                var addid;
+                $('.modal_edit_promotion').click(function () {
+                  addid = $(this).attr("id");
+                  $('#popupdedit_promotion').modal('show');
+                  $.ajax({
+                    url: '/data/check_data_promotion',
+                    method: 'post',
+                    data: { id: addid },
+                    success: function (data) {
+                      console.log(data.result_type)
+                      $('#name_type').append(` <select id="edit_name_type" name="type" class="form-select" required>
+                            </select>`);
+                      for (var obj of data.result_type) {
+                        $('#edit_name_type').append(`<option value="${obj.id_type}">${obj.name}</option>`);
+                      }
+
+                      $('#edit_name_ref').val(data.data[0].ref);
+                      $('#edit_name_price').val(data.data[0].price);
+                      $('#edit_name_amount').val(data.data[0].amount);
+                      $('#edit_name_type').val(data.data[0].name);
+                      $('#edit_name_time_on').val(data.data[0].time_on);
+                      $('#edit_name_time_off').val(data.data[0].time_off);
+                      $('.edit_name_branch').val(data.data[0].name_branch);
+                      $('.edit_name_branch').attr("id", data.data[0].branch_id);
+                      $('#edit_name_status').val(data.data[0].status);
+                      $('#edit_name_type').val(data.data[0].type);
+                    }
+                  });
+                });
+                $('.cancle_money').click(function () {
+                  $("#edit_name_type").remove();
+                });
+                $('.cancle_money_add').click(function () {
+                  $("#add_name_type").remove();
+                });
+
+
+                $('#edit_withdraw_money').click(function () {
+                  let edit_name_branch = $('.edit_name_branch').attr("id");
+                  let edit_name_ref = $('#edit_name_ref').val()
+                  let edit_name_price = $('#edit_name_price').val()
+                  let edit_name_amount = $('#edit_name_amount').val()
+                  let edit_name_type = $('#edit_name_type').val()
+                  let edit_name_time_on = $('#edit_name_time_on').val()
+                  let edit_name_time_off = $('#edit_name_time_off').val()
+                  // let edit_name_branch = $('#edit_name_branch').val()
+                  let edit_name_status = $('#edit_name_status').val()
+                  // var addid = $(this).attr("id");
+                  console.log(edit_name_branch)
+                  Swal.fire({
+                    title: 'คุณต้องการบันทึกข้อมูลหรือไม่ ?',
+                    // icon: 'warning',
+                    showDenyButton: true,
+                    confirmButtonText: 'ยืนยัน',
+                    denyButtonText: `ยกเลิก`,
+                  }).then((result) => {
+                    $.ajax({
+                      url: '/data/edit_data_promotion',
+                      method: 'post',
+                      data: {
+                        id: addid, edit_name_ref,
+                        edit_name_price, edit_name_amount,
+                        edit_name_time_on, edit_name_time_off,
+                        edit_name_branch, edit_name_status,
+                        edit_name_type
+                      },
+                      success: function (data) {
+                        console.log(data)
+                        if (data.status == "error") {
+                          Swal.fire(
+                            'เกิดข้อผิดพลาด',
+                            '',
+                            'error'
+                          )
+                        } else {
+                          $('#popupdedit_promotion').modal('hide');
+                          Swal.fire(
+                            'บันทึกข้อมูลสำเร็จ',
+                            '',
+                            'success'
+                          ).then(() => {
+                            window.location = "/managepromotion"
+                          })
+                        }
+                        // });
+
+                      }
+                    });
+                  });
+                });
+                $('.delete_promotion').click(function () {
+                  // var addid = $(this).attr("id");      
+                  // let money = $('#edit_name_money').val()
+                  var id = $(this).attr("id");
+                  console.log(id)
+                  Swal.fire({
+                    title: 'คุณต้องการยกเลิกข้อมูลหรือไม่ ?',
+                    // icon: 'warning',
+                    showDenyButton: true,
+                    confirmButtonText: 'ยืนยัน',
+                    denyButtonText: `ยกเลิก`,
+                  }).then((result) => {
+                    $.ajax({
+                      url: '/data/delete_data_promotion',
+                      method: 'post',
+                      data: { id: id },
+                      success: function (data) {
+                        console.log(data)
+                        if (data.status == "error") {
+                          Swal.fire(
+                            'เกิดข้อผิดพลาด',
+                            '',
+                            'error'
+                          )
+                        } else {
+                          $('#popupedit_withdraw_money').modal('hide');
+                          Swal.fire(
+                            'บันทึกข้อมูลสำเร็จ',
+                            '',
+                            'success'
+                          ).then(() => {
+                            window.location = "/transection"
+                          })
+                        }
+                        // });
+
+                      }
+                    });
+                  })
+                });
+              });
+            </script>
+
+</body>
+
+</html>

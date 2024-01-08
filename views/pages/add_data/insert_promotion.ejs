@@ -1,0 +1,77 @@
+<!-- Modal -->
+<div class="modal fade" id="popupdinsert_promotion" tabindex="-1" aria-labelledby="headname" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="headname_admin">ข้อมูลโปรโมชั่น </h1>
+                <button type="button" class="btn-close cancle_money_add" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+
+                    <!-- <tr>
+                        <th scope="row">รหัสผู้ใช้งาน</th>
+                        <td class="id"> 1 </td>
+                    </tr> -->
+                    <tr>
+                        <th scope="row">รหัส </th>
+                        <td><input type="text" id="add_name_ref" name="ref" class="form-control" required></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">จำนวน </th>
+                        <td><input type="text" id="add_name_price" name="price" class="form-control" required></td>
+
+                    </tr>
+                    <tr>
+                        <th scope="row">จำนวนการใช้งาน </th>
+                        <td><input type="text" id="add_name_amount" name="amount" class="form-control" required></td>
+
+                    </tr>
+                    <tr>
+                        <th scope="row">ประเภท </th>
+                        <td id="add_type">
+                           
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">เริ่มต้นการใช้งาน </th>
+                        <td><input type="date" id="add_name_time_on" name="time_on" class="form-control" required></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">สิ้นสุดการใช้งาน </th>
+                        <td><input type="date" id="add_name_time_off" name="time_off" class="form-control" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">สาขา </th>
+                        <td id="branch_select">
+                            <% if ( branch==0) { %>
+                                <input type="text" id="" name="name_branch" class="form-control add_name_branch"
+                                 >
+                                <% }else{ %>
+                                    <input type="text" id="" name="name_branch" class="form-control add_name_branch"
+                                    readonly >
+                                    <% } %>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th scope="row">สถานะ </th>
+                        <td>
+                            <select id="add_name_status" name="status" class="form-select" required>
+                                <option value="1">เปิดการใช้งาน</option>
+                                <option value="2">ปิดการใช้งาน</option>
+                            </select>
+
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="save_add_promotion">ยืนยัน</button>
+                <button type="button" class="btn btn-danger cancle_money_add" data-bs-dismiss="modal">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+</div>
