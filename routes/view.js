@@ -39,6 +39,7 @@ const db = mysql.createPool({
   waitForConnections: true,
   queueLimit: 0
 });
+
 let result_state_all_box = [];
 let use_car = 0;
 let accident_car = 0;
@@ -54,43 +55,56 @@ const sessionChecker = (req, res, next) => {
   }
 };
 async function data_car_all(result_carwash) {
-  for (const value of result_carwash) {
-    console.log(value["car_name"]);
-    const ref_foam = db_fb.ref("/" + value["car_name"].toString() + '/state_foam');
-    const ref_water = db_fb.ref("/" + value["car_name"].toString() + '/state_water');
+  console.log("=============");
+  console.log(result_carwash);
+  try {
+      const promises = result_carwash.map(async value => {
+          console.log(value["car_name"]);
+          const ref_foam = db_fb.ref("/" + value["car_name"].toString() + '/state_foam');
+          const ref_water = db_fb.ref("/" + value["car_name"].toString() + '/state_water');
 
-    try {
-      const [foamSnapshot, waterSnapshot] = await Promise.all([
-        ref_foam.once('value'),
-        ref_water.once('value')
-      ]);
-      const data_ref_foam = foamSnapshot.val() || 0;
-      const data_ref_water = waterSnapshot.val() || 0;
+          const [foamSnapshot, waterSnapshot] = await Promise.all([
+              ref_foam.once('value'),
+              ref_water.once('value')
+          ]);
+          
+          const data_ref_foam = foamSnapshot.val() || 0;
+          const data_ref_water = waterSnapshot.val() || 0;
 
-      console.log("Foam:", data_ref_foam);
-      console.log("Water:", data_ref_water);
+          console.log("Foam:", data_ref_foam);
+          console.log("Water:", data_ref_water);
 
-      if (data_ref_foam == 1 && data_ref_water == 1) {
-        result_state_all_box.push({ car_box: 1 ,id_box_car : value["idcar_wash"],id_box_car_status : value["status"],id_box_branch : value["branch_id"],id_box_car_status_detail : value["status_detail"]});
-        // console.log("Added to result_state_all_box");
-        use_car += 1;
-      } else {
+          if (data_ref_foam == 1 && data_ref_water == 1) {
+              result_state_all_box.push({
+                  car_box: 1,
+                  car_name: value["car_name"],
+                  id_box_car: value["idcar_wash"],
+                  id_box_car_status: value["status"],
+                  id_box_branch: value["branch_id"],
+                  id_box_car_status_detail: value["status_detail"]
+              });
+              use_car += 1;
+          } else {
+              result_state_all_box.push({
+                  car_box: 0,
+                  car_name: value["car_name"],
+                  id_box_car: value["idcar_wash"],
+                  id_box_car_status: value["status"],
+                  id_box_branch: value["branch_id"],
+                  id_box_car_status_detail: value["status_detail"]
+              });
+              accident_car += 1;
+          }
+      });
 
-        result_state_all_box.push({ car_box: 0 ,id_box_car : value["idcar_wash"],id_box_car_status : value["status"],id_box_branch : value["branch_id"],id_box_car_status_detail : value["status_detail"]});
-        // console.log("Not added to result_state_all_box");
-        accident_car += 1;
-      }
-     
-    } catch (error) {
-      // console.error("Error fetching data:", error);
-    }
+      await Promise.all(promises);
+
+      console.log(result_state_all_box);
+  } catch (error) {
+      console.error("Error fetching data:", error);
   }
-  console.log(result_state_all_box)
-  // console.log(result_state_all_box);
-  // console.log("Use Car Count:", use_car);
-  // console.log("Accident Car Count:", accident_car);
-  // console.log("Error Car Count:", error_car);
 }
+
 
 //dashboard
 router.get('/index', sessionChecker, async (req, res) => {
@@ -171,6 +185,8 @@ router.get('/index', sessionChecker, async (req, res) => {
     accident_car = 0;
     error_car = 0;
     const [result_carwash] = await db.query(`SELECT * FROM car_wash  `, );
+    console.log("===))))))))")
+    console.log(result_carwash)
     await data_car_all(result_carwash);
       res.render('pages/dashboard', {
         branch: session.branch, data_count_carwash: result,
@@ -407,7 +423,7 @@ router.get('/show_branch', sessionChecker, async (req, res, next) => {
   try {
     const [result] = await db.query(`SELECT * FROM branch 
     LEFT JOIN city_branch 
-    ON branch.id_branch = city_branch.id_city
+    ON branch.city_id = city_branch.id_city
     
     where branch.delete_time IS NULL and 
     branch.id_branch  != 0
@@ -591,10 +607,31 @@ router.get('/washcarInSystem', sessionChecker, async (req, res) => {
       use_car = 0;
       accident_car = 0;
       error_car = 0;
-      const [result_carwash] = await db.query(` SELECT * FROM car_wash 
-      where delete_time IS NULL
-      ORDER BY car_wash.branch_id 
-      LIMIT 4`);
+
+      /*
+           นับแถว       บน    คำสั่งแยก ด้วย  สาขา    จัดเรียงด้วยลำดับ  ชื่อว่า  row_num
+คำสั่ง SQL ROW_NUMBER() OVER (PARTITION BY branch_id ORDER BY idcar_wash,stat) AS row_num ใช้ในการกำหนดหมายเลขแถว (row number) สำหรับแต่ละรายการในผลลัพธ์ที่ได้จากซับคิวรี่ภายใน SELECT โดยแบ่งกลุ่มแต่ละรายการตามค่าที่อยู่ในคอลัมน์ branch_id และจัดเรียงแต่ละกลุ่มตามค่าที่อยู่ในคอลัมน์ idcar_wash ซึ่งเป็นคอลัมน์ที่ใช้เป็นเครื่องหมายการระบุเพื่อแยกแยะระหว่างแถวที่แตกต่างกันในตาราง car_wash โดยใช้เงื่อนไขดังกล่าวเป็นพื้นฐานในการกำหนดค่า row_num สำหรับแต่ละแถว
+
+นั่นหมายความว่า row_num จะมีค่าเพิ่มขึ้นเรื่อย ๆ ตามลำดับของข้อมูลที่ถูกจัดเรียงตาม idcar_wash ในแต่ละกลุ่มของ branch_id โดยที่แถวแรกของแต่ละกลุ่มจะมี row_num เป็น 1 และแถวถัดไปจะเพิ่มขึ้นไปเรื่อย ๆ ตามลำดับ
+
+
+branch_id | idcar_wash | row_num
+--------------------------------
+1         | 1          | 1
+1         | 4          | 2
+1         | 5          | 3
+1         | 6          | 4
+2         | 2          | 1
+2         | 3          | 2
+
+      */
+      const [result_carwash] = await db.query(`SELECT * FROM (
+        SELECT *,
+            ROW_NUMBER() OVER (PARTITION BY branch_id ORDER BY status,idcar_wash) AS row_num
+        FROM car_wash
+        WHERE delete_time IS NULL
+    ) AS ranked;
+    `);
       await data_car_all(result_carwash);
       res.render('pages/washcarInSystem', {
         admin_name: session.admin_name,

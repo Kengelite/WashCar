@@ -165,26 +165,36 @@
             // var uid = $(this).attr("id");
             // console.log(uid)
             $('#add_cus_save').click(function () {
-                let name = $('#name_cus').val()
+                let fname = $('#fname_cus').val()
+                let lname = $('#lname_cus').val()
                 let email = $('#email_cus').val()
                 let password = $('#password_cus').val()
                 let tel = $('#tel_cus').val()
-                if (name != '' && email != '' && password != '' && tel != '') {
-                    let data_cus = { name: name, email: email, password: password, tel: tel }
+                if (lname != '' && fname != '' && email != '' && password != '' && tel != '') {
+                    let data_cus = { fname: fname, lname: lname, email: email, password: password, tel: tel }
                     console.log(data_cus)
                     $.ajax({
                         url: '/data/insert_cus',
                         method: 'post',
-                        data: { name: name, email: email, password: password, tel: tel },
-                        success: function () {
+                        data: { fname: fname, lname: lname, email: email, password: password, tel: tel },
+                        success: function (val) {
                             // });
-                            Swal.fire(
-                                'บันทึกข้อมูลสำเร็จ',
-                                '',
-                                'success'
-                            ).then(() => {
-                                window.location = "/show_cus"
-                            })
+                            if (val.success == true) {
+                                Swal.fire(
+                                    'บันทึกข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_cus"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'บันทึกข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
                         },
                         error: function (error) {
                             Swal.fire(
@@ -214,10 +224,6 @@
             });
 
         });
-
-
-
-
 
 
 

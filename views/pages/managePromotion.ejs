@@ -122,26 +122,6 @@
           <div class="col">
             <div class="card" style="width: 100%;">
               <div class="card-body">
-                <h5 class="card-title">--------------</h5>
-                <div class="card-text cardtxt">
-                  <%= result_total[0].total_price; %>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card" style="width: 100%;">
-              <div class="card-body">
-                <h5 class="card-title">-------------------</h5>
-                <div class="card-text cardtxt">
-                  <%= result_count_promotion[0].count_promotion; %>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card" style="width: 100%;">
-              <div class="card-body">
                 <h5 class="card-title">จำนวนที่มีการใช้งาน</h5>
                 <div class="card-text cardtxt">
                   <%= result_count_promotion[0].count_promotion; %>
@@ -177,10 +157,9 @@
                       <th scope="col">รูปแบบ</th>
                       <th scope="col">มูลค่า</th>
                       <th scope="col">จำนวน</th>
-                      <th scope="col">คงเหลือ</th>
                       <th scope="col">สถานะ</th>
                       <% if ( branch==0) { %>
-                        <th scope="col">สาขา</th>
+                        <th scope="col"></th>
                         <% } %>
                           <th scope="col"></th>
                           <th scope="col"></th>
@@ -208,15 +187,6 @@
                           <td style="padding: 20px;">
                             <%= recordPerson.amount; %>
                           </td>
-                          <td style="padding: 20px;">
-
-                          </td>
-                          <% if ( branch==0) { %>
-                            <td style="padding: 20px;">
-                              <%= recordPerson.name_branch; %>
-                            </td>
-
-                            <% } %>
                               <td>
                                 <div style="margin-top: 10%;" id="money_show">
                                   <% if (recordPerson.status==1) { %>

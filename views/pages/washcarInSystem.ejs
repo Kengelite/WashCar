@@ -269,6 +269,7 @@
                                           <% } %>
                                         </p>
                                         <div class="showdetail" id="<%= item.id_box_car_status_detail %>"></div>
+                                        <div class="show_name" id="<%= item.car_name %>"></div>
                                       </div>
                                     </div>
                                   </div>
@@ -330,7 +331,15 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
               <div class="form-group d-flex align-items-center">
+                <label  class="mb-0 mr-2">รหัสของตัวกล่อง : </label>
+                <div class=" mb-0 ms-4">
+                  <input type="text" class="form-control car_name_show" >
+                </div>
+              </div>
+
+              <div class="form-group mt-3  d-flex align-items-center">
                 <label for="switch" class="mb-0 mr-2">สถานะการทำงาน (ปิด-เปิด) : </label>
                 <div class="toggle-switch mb-0 ms-4">
                   <input type="checkbox" id="switch" data-switch="1">
@@ -382,23 +391,22 @@
             </div>
             <div class="modal-body">
               <div class="form-group mt-3 d-flex align-items-center">
-                <label  class="mb-0 mr-2">สาขา : </label>
+                <label  class="mb-0 mr-2">  สาขา : </label>
                 <div class="mb-0 ms-4 d-flex align-items-center">
                   <select  id="boxbranch" class="form-control sta_detail" >
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
+
                   </select>
                   <!-- <input type="text" class="form-control sta_detail" > -->
                 </div>
                 
               </div>
+              
             </div>
             
             
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+              <button type="button" class="btn btn-success save_new_box" data-bs-dismiss="modal">ยืนยัน</button>
+              <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">ปิด</button>
               <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
             </div>
           </div>
@@ -468,10 +476,16 @@
             var showheadder = $(this).find('.showheadder');
             // แสดงคลาสใน console.log
             var showdetail = $(this).find('.showdetail').attr("id");
+
+            var showdetail_name = $(this).find('.show_name').attr("id");
             
             var showheaddertxt = showheadder.text();
+            console.log(showdetail_name)
             var idValue = showheadder.attr("id");
-            
+
+            $(".car_name_show").val(showdetail_name);
+
+
            $(".status").text(showheaddertxt);
             if(showdetail === ''){
               $(".sta_detail").val('-');
@@ -551,10 +565,71 @@
         })
         $('.insert_box').click(function () {
           $('#showmodal_insertbox').modal('show');
-        })
+          $.ajax({
+              url: '/data/viewallbranch',
+              method: 'post',
+              success: function (datval) {
+                datval.data.forEach(element => {
+                      console.log(element);
+                      $("#boxbranch").append(`<option value="${element.id_branch}">${element.name_branch}</option>`);
+                  });
+              }
+          });
+          
+       });
+
+
+       $('.save_new_box').click(function () {
+        let id = $('#boxbranch').val();
+            console.log(id)
+        Swal.fire({
+                title: 'คุณต้องการเพิ่มข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/insert_new_box',
+                        method: 'post',
+                        data: { id,id},
+                        success: function (data) {
+                          console.log(data)
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'เพิ่มข้อมูลสำเร็จ',
+                                    'รหัสของตัวกล่อง คือ '+ data.name_box,
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/washcarinsystem"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ลบข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ลบข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
+          
+       
+       
         $('.btn_send_delete').click(function () {
             // var id_city = $(this).attr("id");
             // console.log(uid)
+        
             Swal.fire({
                 title: 'คุณต้องการลบข้อมูลหรือไม่ ?',
                 // icon: 'warning',

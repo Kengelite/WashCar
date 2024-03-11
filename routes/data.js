@@ -368,17 +368,29 @@ router.post('/delete_data_admin', sessionChecker, async (req, res) => {
 // });
 
 //insert_admin
-router.post('/insert_admin', (req, res) => {
-  // let name = req.body.name
-  // let email = req.body.email
-  // let password = req.body.password
-  // let branch = req.body.branch
-  // let tel = req.body.tel
-  // console.log(name);
-  // db.query("INSERT INTO `admin`( `name`, `username`, `password`, `branch`, `tel`) VALUES (?,?,?,?,?)", [name, email, password, branch, tel], function (err, result, fields) {
-  //   if (err) throw err;
-  //   res.send(result)
-  // });
+router.post('/insert_admin',async (req, res) => {
+  let name = req.body.name
+  let email = req.body.email
+  let password = req.body.password
+  let branch = req.body.branch
+  let tel = req.body.tel
+  const [result_branch] = await db.query(`select * from branch
+  where name_branch = ? and  branch.delete_time IS NULL`,
+    [branch]);
+  console.log(result_branch);
+  if(result_branch.length != 0){
+
+    const [result_add_admin] = await db.query(`INSERT INTO admin( admin_name, username, password, branch_id, admin_tel) VALUES (?,?,?,?,?)`,
+    [name, email, password, result_branch[0].id_branch, tel]);
+   if(result_add_admin.length != 0){
+    res.status(200).json({ 'success': true,result_add_admin})
+   }else{
+    res.status(500).json({ 'success': false})
+   }
+  }else{
+    res.status(500).json({ 'success': false})
+  }
+ 
 });
 
 
@@ -454,18 +466,21 @@ router.post('/choose_year_data_dashboard', async (req, res) => {
 
 
 
-router.post('/insert_cus', (req, res) => {
+router.post('/insert_cus',async (req, res) => {
 
-  db_fb.ref('working_state').set(0)
-  // let name = req.body.name
-  // let email = req.body.email
-  // let password = req.body.password
-  // let tel = req.body.tel
-  // console.log(name);
-  // db.query("INSERT INTO `customer`( `name`, `username`, `password`,`tel`) VALUES (?,?,?,?)", [name, email, password, tel], function (err, result, fields) {
-  //   if (err) throw err;
-  //   res.send(result)
-  // });
+  //db_fb.ref('working_state').set(0)
+  let fname = req.body.fname
+  let lname = req.body.lname
+  let email = req.body.email
+  let password = req.body.password
+  let tel = req.body.tel
+  const [result_add_admin] = await db.query("INSERT INTO `customer`( `username`,`fname`,`lname`,  `password`,`tel`) VALUES (?,?,?,?,?)", [ email,fname,lname, password, tel]);
+ if(result_add_admin.length != 0){
+  res.status(200).json({ 'success': true,result_add_admin})
+ }else{
+  res.status(500).json({ 'success': false})
+ }
+
 });
 
 
@@ -564,17 +579,36 @@ router.post('/delete_city', sessionChecker, async (req, res) => {
 
 });
 
+router.post('/delete_branch', sessionChecker, async (req, res) => {
 
+  try {
+    const [result] = await db.query("UPDATE branch SET delete_time = NOW() where id_branch  = ?", [req.body.id_branch]);
+
+    // const iterableResult = Object.values(result); // แปลงเป็น iterable array
+
+    console.log(result.affectedRows)
+    if (result.affectedRows != 0) {
+      res.status(200).json({ 'status': 'success', 'data': result })
+    } else {
+      res.status(200).json({ 'status': 'error' })
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ 'success': false, 'message': 'Internal server error' });
+  }
+
+});
 
 
 
 // insert branch
+
 router.post('/insert_branch', async (req, res) => {
   try {
-    console.log(req.body.name_city)
+    console.log(req.body.name_branch)
     const [result] = await db.query(`select * from branch
-    where name_branch = ?`,
-      [req.body.name_city]);
+    where name_branch = ? and  branch.delete_time IS NULL`,
+      [req.body.name_branch]);
 
     // const iterableResult = Object.values(result); // แปลงเป็น iterable array
 
@@ -582,16 +616,109 @@ router.post('/insert_branch', async (req, res) => {
     if (result.length != 0) {
       res.status(200).json({ 'status': 'error' })
     } else {
-      const [result_add_city] = await db.query(`INSERT INTO branch(name_branch) 
-      VALUES (?)`,
+
+      const [result_city] = await db.query(`select * from city_branch
+      where name_city = ? and city_branch.delete_time IS NULL`,
         [req.body.name_city]);
-      res.status(200).json({ 'status': 'success' })
+        console.log(result_city[0].id_city)
+
+        if(result_city.length == 0){
+          const [result_add_city] = await db.query(`INSERT INTO city_branch(name_city) 
+          VALUES (?)`,
+            [req.body.name_city]);
+            console.log(result_add_city)
+            const [result_add_branch] = await db.query(`INSERT INTO branch(name_branch,city_id,latitude,longitude) 
+            VALUES (?,?,?,?)`,
+              [req.body.name_branch,result_add_city.insertId,req.body.latitude,req.body.longitude]);
+            
+          res.status(200).json({ 'status': 'success' })
+        }else{
+          console.log("=>>",result_city[0].id_city)
+          const [result_add_branch] = await db.query(`INSERT INTO branch(name_branch,city_id,latitude,longitude) 
+          VALUES (?,?,?,?)`,
+            [req.body.name_branch,result_city[0].id_city,req.body.latitude,req.body.longitude]);
+          
+        res.status(200).json({ 'status': 'success' })
+        }
+      
     }
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ 'success': false, 'message': 'Internal server error' });
   }
 });
+
+
+
+
+router.post('/edit_branch', async (req, res) => {
+  try {
+    console.log(req.body.name_branch)
+    const [result] = await db.query(`select * from branch
+    where name_branch = ? and  branch.delete_time IS NULL`,
+      [req.body.name_branch]);
+
+    // const iterableResult = Object.values(result); // แปลงเป็น iterable array
+
+    console.log(result.length)
+    if (result.length != 0) {
+      const [result_city] = await db.query(`select * from city_branch
+      where name_city = ? and city_branch.delete_time IS NULL`,
+        [req.body.name_city]);
+        if(result_city.length == 0){
+          const [result_add_city] = await db.query(`INSERT INTO city_branch(name_city) 
+          VALUES (?)`,
+            [req.body.name_city]);
+            console.log(result_add_city)
+            const [result_add_branch] = await db.query(`
+            update branch set  name_branch = ? ,city_id = ?, latitude = ?, longitude = ?
+            where id_branch = ? `,
+              [req.body.name_branch,result_add_city.insertId,req.body.latitude,req.body.longitude,req.body.id]);
+            
+          res.status(200).json({ 'status': 'success' })
+        }else{
+          res.status(200).json({ 'status': 'error' })
+        }
+      
+
+    } else {
+
+      const [result_city] = await db.query(`select * from city_branch
+      where name_city = ? and city_branch.delete_time IS NULL`,
+        [req.body.name_city]);
+        console.log(result_city[0].id_city)
+
+        if(result_city.length == 0){
+          const [result_add_city] = await db.query(`INSERT INTO city_branch(name_city) 
+          VALUES (?)`,
+            [req.body.name_city]);
+            console.log(result_add_city)
+            const [result_add_branch] = await db.query(`
+            update branch set  name_branch = ? ,city_id = ?, latitude = ?, longitude = ?
+            where id_branch = ? `,
+              [req.body.name_branch,result_add_city.insertId,req.body.latitude,req.body.longitude,req.body.id]);
+            
+          res.status(200).json({ 'status': 'success' })
+        }else{
+          console.log("=>>",result_city[0].id_city)
+          const [result_add_branch] = await db.query(  `update branch set  name_branch = ? ,city_id = ?, latitude = ?, longitude = ?
+            where id_branch = ? `,
+            [req.body.name_branch,result_city[0].id_city,req.body.latitude,req.body.longitude,req.body.id]);
+          
+        res.status(200).json({ 'status': 'success' })
+        }
+      
+    }
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ 'success': false, 'message': 'Internal server error' });
+  }
+});
+
+
+
 
 router.post('/viewallcity', sessionChecker, async (req, res) => {
   console.log(req.body.id_city);
@@ -905,6 +1032,78 @@ router.post('/delete_box_carwash', sessionChecker, async (req, res) => {
 
 });
 
+router.post('/viewallbranch', sessionChecker, async (req, res) => {
+  try {
+    const [result] = await db.query(`select * from branch
+    where delete_time is null`, );
+
+    // const iterableResult = Object.values(result); // แปลงเป็น iterable array
+
+    res.status(200).json({ status: 'success', 'data': result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ 'success': false, 'message': 'Internal server error' });
+  }
+});
+
+router.post('/viewallbranchwhere', sessionChecker, async (req, res) => {
+  try {
+    const [result] = await db.query(`select * from branch
+    left join city_branch on branch.city_id = city_branch.id_city
+    where branch.delete_time is null and id_branch = ?`,[req.body.id] );
+
+    // const iterableResult = Object.values(result); // แปลงเป็น iterable array
+
+    res.status(200).json({ status: 'success', 'data': result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ 'success': false, 'message': 'Internal server error' });
+  }
+});
+
+router.post('/viewalladmin', sessionChecker, async (req, res) => {
+  try {
+    const [result] = await db.query(`select * from admin
+    where delete_time is null`, );
+
+    // const iterableResult = Object.values(result); // แปลงเป็น iterable array
+
+    res.status(200).json({ status: 'success', 'data': result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ 'success': false, 'message': 'Internal server error' });
+  }
+});
+
+router.post('/insert_new_box', async (req, res) => {
+  const [result_all] = await db.query(`select count(*) as total from car_wash`);
+  console.log(result_all[0]['total'])
+  let txt_x = 'box'+(result_all[0]['total']+1)
+  const [result] = await db.query(`
+    INSERT INTO car_wash(status,  car_name, status_water, status_wind, status_foam, admin_idadmin, branch_id)
+     VALUES (?,?,?,?,?,?,?)
+`, [1, txt_x, 1, 1, 1, 2, req.body.id]);
+const [result_id] = await db.query(`
+select * from car_wash where idcar_wash = ?
+`, [result.insertId]);
+
+    if (result.length != 0) {
+      db_fb.ref(txt_x+"/credit_balance").set(0)
+      db_fb.ref(txt_x+"/error_state").set(0)
+      db_fb.ref(txt_x+"/new_state").set(0)
+      db_fb.ref(txt_x+"/state_foam").set(0)
+      db_fb.ref(txt_x+"/state_water").set(0)
+      db_fb.ref(txt_x+"/state_wind").set(0)
+      db_fb.ref(txt_x+"/val_wind").set(0)
+      db_fb.ref(txt_x+"/working_new").set(0)
+      db_fb.ref(txt_x+"/working_now").set(0)
+      db_fb.ref(txt_x+"/working_state").set(0)
+      res.status(200).json({ 'status': "success",name_box:result_id[0].car_name })
+    } else {
+      res.status(200).json({ 'status': "error"})
+    }
+
+});
 
 
 module.exports = router;

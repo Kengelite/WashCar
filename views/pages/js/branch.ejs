@@ -1,4 +1,5 @@
 <script>
+    let uid_box ;
     $(document).ready(function () {
         $('#add_city').click(function () {
             $('#popupinsert_city').modal('show');
@@ -98,6 +99,49 @@
                 }
             })
         });
+        $('.modal_delete_branch').click(function () {
+            var id_branch = $(this).attr("id");
+            // console.log(uid)
+            Swal.fire({
+                title: 'คุณต้องการลบข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/delete_branch',
+                        method: 'post',
+                        data: { id_branch: id_branch },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'ลบข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_branch"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ลบข้อมูลผิดพลาด',
+                                    '',
+                                    'error'
+                                )
+                            }
+
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ลบข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
         var id_city
         $('.modal_update_city').click(function () {
             id_city = $(this).attr("id");
@@ -157,7 +201,7 @@
                             } else {
                                 Swal.fire(
                                     'ข้อมูลผิดพลาด',
-                                    'มีข้อมูลนี้อยู่ใยระบบแล้ว',
+                                    'มีข้อมูลนี้อยู่ในระบบแล้ว',
                                     'error'
                                 )
                             }
@@ -172,64 +216,144 @@
                     });
                 }
             })
-
         });
         $('#add_branch').click(function () {
             $('#popupinsert_branch').modal('show');
         })
+
+        $('.edit_branch').click(function () {
+            uid_box= $(this).attr("id")
+            console.log(uid_box)
+            $.ajax({
+                url: '/data/viewallbranchwhere',
+                method: 'post',
+                data: {
+                    id: uid_box
+                },
+                success: function (data) {
+                    console.log(data)
+                    $("#nameedit_branch").val(data.data[0].name_branch)
+                    $("#city_branch_edit").val(data.data[0].name_city)
+                    $("#latitude_branch_edit").val(data.data[0].latitude)
+                    $("#longitude_branch_edit").val(data.data[0].longitude)
+
+                    setMapCenter(data.data[0].latitude, data.data[0].longitude)
+
+
+                }
+
+            });
+            $('#popupedit_branch').modal('show');
+
+
+        })
         $('#add_branch_save').click(function () {
             // var uid = $(this).attr("id");
             // console.log(uid)
-            let name_branch = $('#name_branch').val()
-            console.log(name_branch)
-            $.ajax({
-                url: '/data/insert_branch',
-                method: 'post',
-                data: { name_branch: name_branch },
-                success: function (data) {
+            let name_branch = $('#nameadd_branch').val()
+            let city_branch = $('#city_branch').val()
+            let latitude_branch = $('#latitude_branch').val()
+            let longitude_branch = $('#longitude_branch').val()
+            if (name_branch != "" && city_branch != "" && latitude_branch != "" && longitude_branch != "") {
+                console.log(name_branch)
+                console.log(latitude_branch)
+                console.log(longitude_branch)
+                $.ajax({
+                    url: '/data/edit_branch',
+                    method: 'post',
+                    data: {
+              
+                        name_branch: name_branch, name_city: city_branch, latitude: latitude_branch
+                        , longitude: longitude_branch
+                    },
+                    success: function (data) {
 
-                    if (data.status == 'error') {
-                        Swal.fire(
-                            'เกิดข้อผิดพลาด',
-                            'มีข้อมูลในระบบอยู่แล้ว',
-                            'error'
-                        )
-                    } else {
-                        Swal.fire(
-                            'เพิ่มข้อมูลเรียบร้อย',
-                            '',
-                            'success'
-                        ).then(() => {
-                            $('#name_city').val('')
-                            window.location = "/show_branch"
-                        })
+                        if (data.status == 'error') {
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด',
+                                'มีข้อมูลในระบบอยู่แล้ว',
+                                'error'
+                            )
+                        } else {
+                            Swal.fire(
+                                'เพิ่มข้อมูลเรียบร้อย',
+                                '',
+                                'success'
+                            ).then(() => {
+                                $('#name_city').val('')
+                                window.location = "/show_branch"
+                            })
+
+                        }
 
                     }
-                    // $('#popupdata').modal('show');
-                    // $('#headname_customer').html("ข้อมูล " + data.data[0].fname + ' ' + data.data[0].lname);
-                    // // $('.id').html(data.data[0].id_cus);
-                    // $('.email').html(data.data[0].username);
-                    // $('.name').html(data.data[0].fname + '  ' + data.data[0].lname);
-                    // $('.money').html(Number(data.data[0].money).toLocaleString() + ' ฿');
-                    // $('.point').html(Number(data.data[0].balance_point).toLocaleString());
-                    // $('.tel ').html(data.data[0].tel);
-                    // console.log(data.data[0].total_use)
-                    // if (data.data[0].total_use == null) {
-                    //     $('.money_use ').html(0);
-                    // } else {
-                    //     $('.money_use ').html(data.data[0].total_use);
-                    // }
 
-
-                    // });
-
-                }
-            });
+                });
+            } else {
+                Swal.fire(
+                    'เกิดข้อผิดพลาด',
+                    'กรุณากรอกข้อมูล',
+                    'error'
+                )
+            }
         });
-
-
-
-
     });
+    $('#edit_branch_save').click(function () {
 
+        let name_branch = $('#nameedit_branch').val()
+        let city_branch = $('#city_branch_edit').val()
+        let latitude_branch = $('#latitude_branch_edit').val()
+        let longitude_branch = $('#longitude_branch_edit').val()
+        console.log(uid_box)
+        if (name_branch != "" && city_branch != "" && latitude_branch != "" && longitude_branch != "") {
+            Swal.fire({
+                title: 'คุณต้องการแก้ไขข้อมูลหรือไม่ ?',
+                // icon: 'warning',
+                showDenyButton: true,
+                confirmButtonText: 'ยืนยัน',
+                denyButtonText: `ยกเลิก`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/data/edit_branch',
+                        method: 'post',
+                        data: {
+                            id:uid_box,
+                        name_branch: name_branch, name_city: city_branch, latitude: latitude_branch
+                        , longitude: longitude_branch
+                    },
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                Swal.fire(
+                                    'แก้ไขข้อมูลสำเร็จ',
+                                    '',
+                                    'success'
+                                ).then(() => {
+                                    window.location = "/show_branch"
+                                })
+                            } else {
+                                Swal.fire(
+                                    'ข้อมูลผิดพลาด',
+                                    'มีข้อมูลนี้อยู่ในระบบแล้ว',
+                                    'error'
+                                )
+                            }
+                        }, error: function (error) {
+                            Swal.fire(
+                                'ข้อมูลผิดพลาด',
+                                '',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        } else {
+            Swal.fire(
+                'เกิดข้อผิดพลาด',
+                'กรุณากรอกข้อมูล...',
+                'error'
+            )
+        }
+    });
 </script>

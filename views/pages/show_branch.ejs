@@ -133,7 +133,7 @@
                                                     <% if ( branch==0) { %>
                                                         <td>
 
-                                                            <button type="button" class="btn btn-warning modal_editdata"
+                                                            <button type="button" class="btn btn-warning edit_branch"
                                                                 id="<%= recordPerson.id_branch ; %>">
                                                                 แก้ไข
                                                             </button>
@@ -142,7 +142,7 @@
                                                             <% if ( branch==0) { %>
                                                                 <td>
                                                                     <button type="button"
-                                                                        class="btn btn-danger modal_delete"
+                                                                        class="btn btn-danger modal_delete_branch"
                                                                         id="<%= recordPerson.id_branch ; %>">
                                                                         ลบ
                                                                     </button>
@@ -277,8 +277,9 @@
 
 
 
-            <%- include ('add_data/insert_branch'); -%>
+      
             <%- include ('edit_data/edit_branch'); -%>
+            <%- include ('add_data/insert_branch'); -%>
                 <%- include ('js/branch'); -%>
                 
         </div>

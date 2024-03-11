@@ -11,7 +11,11 @@
                     <form action="/submit" method="post" id="insert-form">
                         <tr>
                             <td><label for="">ชื่อ:</label></td>
-                            <td><input type="text" id="name_cus" name="name" class="form-control" required></td>
+                            <td><input type="text" id="fname_cus" name="name" class="form-control" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="">นามสกุล:</label></td>
+                            <td><input type="text" id="lname_cus" name="name" class="form-control" required></td>
                         </tr>
                         <tr>
                             <td><label for="username">อีเมล:</label></td>
@@ -25,7 +29,7 @@
                             <td><label for="tel">โทรศัพท์:</label></td>
                             <td><input type="tel" id="tel_cus" name="tel" class="form-control" required></td>
                         </tr>
-                        <tr>
+                        <tr style="display: none;">
                             <td><label for="img">เพิ่มรูป:</label></td>
                             <td><input type="file" id="img_cus" name="img" class="form-control"  required></td>
                         </tr>

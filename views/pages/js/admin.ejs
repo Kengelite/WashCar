@@ -405,19 +405,29 @@
                         url: '/data/insert_admin',
                         method: 'post',
                         data: { name: name, email: email, password: password, branch: branch, tel: tel },
-                        success: function () {
+                        success: function (val) {
                             // });
-                            Swal.fire(
+                            console.log(val)
+                            if(val.success == true){
+                                 Swal.fire(
                                 'บันทึกข้อมูลสำเร็จ',
                                 '',
                                 'success'
                             ).then(() => {
                                 window.location = "/show_admin"
                             })
+                            }else{
+                                Swal.fire(
+                                'บันทึกข้อมูลผิดพลาดหรืออาจไม่พบสาขา',
+                                '',
+                                'error'
+                            )
+                            }
+                           
                         },
                         error: function (error) {
                             Swal.fire(
-                                'บันทึกข้อมูลผิดพลาด',
+                                'บันทึกข้อมูลผิดพลาดหรืออาจไม่พบสาขา',
                                 '',
                                 'error'
                             )
