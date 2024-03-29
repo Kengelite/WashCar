@@ -1046,6 +1046,39 @@ router.post('/viewallbranch', sessionChecker, async (req, res) => {
   }
 });
 
+router.post('/viewallcredit', sessionChecker, async (req, res) => {
+  try {
+    const [result] = await db.query(`select * from credit_box`, );
+    const [result_credit] = await db.query(`select * from credit`, );
+    // const iterableResult = Object.values(result); // แปลงเป็น iterable array
+
+    res.status(200).json({ status: 'success', 'data': result,result_credit });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ 'success': false, 'message': 'Internal server error' });
+  }
+});
+router.post('/update_credit_box', sessionChecker, async(req, res) => {
+  try {
+    const [result] = await db.query(` UPDATE credit_box SET water = ?, foam = ? , wind = ?
+     where id_credit_box = 1`,
+     [req.body.water,req.body.foam,req.body.wind]);
+
+    // const iterableResult = Object.values(result); // แปลงเป็น iterable array
+    if (result.affectedRows != 0) {
+      db_fb.ref("credit_water").set(parseInt( req.body.water ))
+      db_fb.ref("credit_foam").set(parseInt( req.body.foam))
+      db_fb.ref("credit_wind").set(parseInt( req.body.wind))
+      res.status(200).json({ 'status': 'success', 'data': result })
+    } else {
+      res.status(200).json({ 'status': 'error' })
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ 'success': false, 'message': 'Internal server error' });
+  }
+});
+
 router.post('/viewallbranchwhere', sessionChecker, async (req, res) => {
   try {
     const [result] = await db.query(`select * from branch
